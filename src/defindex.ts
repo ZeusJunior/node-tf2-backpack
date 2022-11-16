@@ -1,4 +1,5 @@
 // TODO: seperate into files etc cleanup
+import { parts } from "./data";
 import { Attribute, InterpretedAttributes, Interpreters, Item } from "./types";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
@@ -33,11 +34,8 @@ const getSheenName = (sheen: number) => {
     if (sheen === 1) return "Sheen effect";
     return;
 };
-const getPartName = (part: number) => {
-    // TODO: see https://raw.githubusercontent.com/danocmx/node-tf2-static-schema/master/static/parts.json
-    if (part === 61) return "Tanks Destroyed";
-    return;
-};
+const getPartName = (part: number) => parts[part];
+
 const spellIndexes: Record<number, Record<number, number>> = {
     1004: {
         0: 8901,
