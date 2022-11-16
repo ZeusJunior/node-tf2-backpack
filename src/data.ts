@@ -96,3 +96,44 @@ export const parts: Record<number, string> = {
     110: "Contract Points Earned",
     111: "Contract Points Contributed To Friends",*/
 }; 
+
+export const partDefindexes = Object.keys(parts);
+
+
+export const spellNames: Record<number, string> = {
+    1006: "Voices from Below",
+    1007: "Pumpkin Bombs",
+    1008: "Halloween Fire",
+    1009: "Exorcism",
+    8900: "Putrescent Pigmentation",
+    8901: "Die Job",
+    8902: "Chromatic Corruption",
+    8903: "Spectral Spectrum",
+    8904: "Sinister Staining",
+    8914: "Team Spirit Footprints",
+    8915: "Gangreen Footprints",
+    8916: "Corpse Gray Footprints",
+    8917: "Violent Violet Footprints",
+    8918: "Rotten Orange Footprints",
+    8919: "Bruised Purple Footprints",
+    8920: "Headless Horseshoes"
+};
+
+export const spellIndexes: Record<number, Record<number, number>> = {
+    1004: {
+        0: 8901,
+        1: 8902,
+        2: 8900,
+        3: 8903,
+        4: 8904
+    },
+    1005: {
+        1: 8914,
+        2: 8920,
+        3100495: 8916,
+        5322826: 8917,
+        8208497: 8919,
+        8421376: 8915,
+        13595446: 8918
+    },
+};
