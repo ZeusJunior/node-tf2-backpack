@@ -1,11 +1,14 @@
-import { spellNames, parts } from "./data";
+import { spellNames, parts, sheens, killstreakers } from "./data";
 import { InterpretedAttributes, Item } from "./types";
-import { objectEntries } from "./util";
 
 const getSpellName = (spell: number) => spellNames[spell];
 const getPartName = (part: number) => parts[part];
+const getSheenName = (sheen?: number) => sheens[sheen || 0];
+const getKillstreakerName = (killstreaker?: number) => killstreakers[killstreaker || 0];
 
-const getWearName = (wear: number) => {
+
+const getWearName = (wear?: number) => {
+    if(!wear) return;
     wear = parseFloat(wear.toFixed(2));
     if (wear === 0.2) return "Factory New";
     if (wear === 0.4) return "Minimal Wear";
@@ -14,20 +17,10 @@ const getWearName = (wear: number) => {
     if (wear === 1) return "Battle-Scarred";
     return;
 }
-const getKillstreakTierName = (tier: number) => {
+const getKillstreakTierName = (tier?: number) => {
     if (tier === 1) return "Killstreak";
     if (tier === 2) return "Specialized Killstreak";
     if (tier === 3) return "Professional Killstreak";
-    return;
-};
-const getKillstreakerName = (killstreaker: number) => {
-    // TODO
-    if (killstreaker === 1) return "Eye effect";
-    return;
-};
-const getSheenName = (sheen: number) => {
-    // TODO
-    if (sheen === 1) return "Sheen effect";
     return;
 };
 
@@ -42,38 +35,13 @@ export function convertToStrings(items: Item<number>[]): Item<string>[] {
     return items.map(stringify);
 }
 
-type Remapper = {
-  [key in keyof InterpretedAttributes<string>]: (
-    value: Required<InterpretedAttributes<number>>[key]
-  ) => InterpretedAttributes<string>[key];
-};
-const REMAPPER: Remapper = {
-    'spells': (values: number[]) => values.map(getSpellName),
-    'parts': (values: number[]) => values.map(getPartName).filter(isDefined),
-    'wear': getWearName,
-    'sheen': getSheenName,
-    'killstreakTier': getKillstreakTierName,
-    'killstreaker': getKillstreakerName
-};
-
-// I genuinely dont understand why these types dont work
 function stringify(item: Item<number>): Item<string> {
-    const stringified = {} as Item<string>;
-
-    for(let [key, value] of objectEntries(item)){
-        if(typeof REMAPPER[key as keyof Remapper] !== 'function') {
-            // @ts-ignore
-            stringified[key] = value;
-            continue;
-        }
-        
-        key = key as keyof Remapper;
-
-        // @ts-ignore
-        const mappedValue = REMAPPER[key](value);
-        if(!mappedValue) continue;
-
-    }
-    return stringified;
-
+    return Object.assign(item, {
+        spells: item.spells?.map(getSpellName),
+        parts: item.parts?.map(getPartName).filter(isDefined),
+        sheen: getSheenName(item.sheen),
+        killstreaker: getKillstreakerName(item.killstreaker),
+        killstreakTier: getKillstreakTierName(item.killstreakTier),
+        wear: getWearName(item.wear),
+    });
 }

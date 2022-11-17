@@ -137,3 +137,23 @@ export const spellIndexes: Record<number, Record<number, number>> = {
         13595446: 8918
     },
 };
+
+export const sheens: Record<number, string | undefined> = {
+    1: "Team Shine",
+    2: "Deadly Daffodil",
+    3: "Manndarin",
+    4: "Mean Green",
+    5: "Agonizing Emerald",
+    6: "Villainous Violet",
+    7: "Hot Rod"
+}
+  
+export const killstreakers: Record<number, string | undefined> = {
+    2002: "Fire Horns",
+    2003: "Cerebral Discharge",
+    2004: "Tornado",
+    2005: "Flames",
+    2006: "Singularity",
+    2007: "Incinerator",
+    2008: "Hypno-Beam"
+}
