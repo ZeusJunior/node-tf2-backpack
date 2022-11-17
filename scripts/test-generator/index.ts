@@ -59,7 +59,10 @@ for(const [name, condition] of Object.entries(toFind)) {
         }
 
         console.log(`Test for match ${name} was found ${item.assetid}`);
-        values[name] = tf2Equivalent;
+        values[name] = {
+            tf2: tf2Equivalent,
+            steam: item
+        };
         break;
     }
     if(!values[name]) {
