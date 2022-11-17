@@ -12,7 +12,7 @@ export type BackpackEntry = {
     origin: number;
     custom_name: null | string;
     custom_desc: null | string;
-    interior_item: BackpackEntry; // Yes, this is another BackpackEntry
+    interior_item: null | BackpackEntry; // Yes, this is another BackpackEntry
     in_use: boolean;
     style: number;
     original_id: null | string;
@@ -26,7 +26,10 @@ export type NodeTF2Backpack = BackpackEntry[];
 export interface Attribute {
     def_index: number;
     value: null; // deprecated
-    value_bytes: number[];
+    value_bytes: {
+        type: "Buffer";
+        data: number[];
+    };
 };
 
 export interface EquippedState {
@@ -50,6 +53,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     paint_other?: string; // name TBD, this is the paint hex for BLU team (if the paint is team colored)
     wear?: T;
     paintkit?: number;
+    lowcraft?: number;
 };
 
 export type MainAttributes = {
@@ -74,4 +78,5 @@ Interpreter<'killstreakTier'> |
 Interpreter<'paint'> |
 Interpreter<'paint_other'> |
 Interpreter<'wear'> |
-Interpreter<'paintkit'>;
+Interpreter<'paintkit'> |
+Interpreter<'lowcraft'>;
