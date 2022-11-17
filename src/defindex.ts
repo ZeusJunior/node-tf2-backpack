@@ -104,8 +104,8 @@ export function isCraftable(item: BackpackEntry) {
     // Explicitly marked as not craftable
     if (item.flags == eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting ) return false;
 
-    // Items with origin StorePromotion, Foreign, Preview or SteamWorkshopContribution are not craftable
-    if ([5, 14, 17, 18].includes(item.origin)) return false;
+    // Items with origin StorePromotion, Earned (specs, medals etc), ThirdPartyPromotion, Foreign, Preview or SteamWorkshopContribution are not craftable
+    if ([5, 9, 10, 14, 17, 18].includes(item.origin)) return false;
 
     // Purchased items (also as attribute 172 but unused) can be used in crafting if explicitly tagged, but not by default
     if (item.origin == 2 && eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) return false;
@@ -136,8 +136,8 @@ export function isTradable(item: BackpackEntry) {
     // Not tradable
 	if (attributes.includes(153)) return false;
 
-    // Items with origin Achievement, Foreign, Preview or SteamWorkshopContribution are not tradable
-    if ([1, 14, 17, 18].includes(item.origin)) return false;
+    // Items with origin Achievement, Earned (specs, medals etc), ThirdPartyPromotion, Foreign, Preview or SteamWorkshopContribution are not tradable
+    if ([1, 9, 10, 14, 17, 18].includes(item.origin)) return false;
 
     // Items with quality Self-Made, Valve or Community are not tradable
     if ([7, 8, 9].includes(item.quality)) return false; 
