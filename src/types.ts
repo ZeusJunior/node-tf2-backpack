@@ -49,7 +49,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     paint?: string;
     paint_other?: string; // name TBD, this is the paint hex for BLU team (if the paint is team colored)
     wear?: T;
-    paintkit?: T;
+    paintkit?: number;
 };
 
 export type MainAttributes = {
