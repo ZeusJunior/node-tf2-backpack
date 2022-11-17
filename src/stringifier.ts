@@ -6,7 +6,6 @@ const getPartName = (part: number) => parts[part];
 const getSheenName = (sheen?: number) => sheens[sheen || 0];
 const getKillstreakerName = (killstreaker?: number) => killstreakers[killstreaker || 0];
 
-
 const getWearName = (wear?: number) => {
     if(!wear) return;
     wear = parseFloat(wear.toFixed(2));

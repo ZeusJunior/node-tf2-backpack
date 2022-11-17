@@ -36,6 +36,7 @@ const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
     261: ["paint_other", getHexStringFromFloat],
+    229: ["lowcraft", getInt],
     380: ["parts", getIntFromFloatAsArray],
     382: ["parts", getIntFromFloatAsArray],
     384: ["parts", getIntFromFloatAsArray],
@@ -67,7 +68,7 @@ export function parseAttributes(itemAttributes: Attribute[])  {
         const [name, interpret] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
         if(!name) continue;
 
-        const value = interpret(Buffer.from(attribute.value_bytes), attribute);
+        const value = interpret(Buffer.from(attribute.value_bytes.data), attribute);
         /**
          * if return type is an array then if one exists, we concat
          */
