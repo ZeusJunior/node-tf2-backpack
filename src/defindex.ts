@@ -56,7 +56,7 @@ const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
 
 export function parseItem(item: BackpackEntry) {
     const attributes = parseAttributes(item.attribute);
-    const craftable = isUsableInCrafting(item);
+    const craftable = isCraftable(item);
     const tradable = isTradable(item);
     return { ...attributes, craftable, tradable };
 }
@@ -86,7 +86,7 @@ export function parseAttributes(itemAttributes: Attribute[])  {
     return parsed;
 }
 
-export function isUsableInCrafting(item: BackpackEntry) {
+export function isCraftable(item: BackpackEntry) {
     const attributes = item.attribute.map(a => a.def_index);
 
     // Not part of economy (also as attribute 777 but unused)
@@ -104,18 +104,46 @@ export function isUsableInCrafting(item: BackpackEntry) {
     // Explicitly marked as not craftable
     if (item.flags == eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting ) return false;
 
-    // Items with origin Invalid, Foreign, StorePromotion or SteamWorkshopContribution are not craftable
+    // Items with origin StorePromotion, Foreign, Preview or SteamWorkshopContribution are not craftable
     if ([5, 14, 17, 18].includes(item.origin)) return false;
 
     // Purchased items (also as attribute 172 but unused) can be used in crafting if explicitly tagged, but not by default
     if (item.origin == 2 && eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) return false;
 
-    // Items with quality Self-Made or Community are not craftable
-    if ([7, 9].includes(item.quality)) return false; 
+    // Items with quality Self-Made, Valve or Community are not craftable
+    if ([7, 8, 9].includes(item.quality)) return false; 
 
     return true;
 }
 
+// Note: also attribute 172 but unused
 export function isTradable(item: BackpackEntry) {
-    return false;
+    const attributes = item.attribute.map(a => a.def_index);
+
+    // Tradable after...
+    if (attributes.includes(211)) return false;
+
+    // Not part of economy (also as attribute 777 but unused)
+    if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy ) return false;
+
+	// Order matters, always tradable overrides not tradable.
+    // 777 NonEconomy should be unused but just in case
+	if (attributes.includes(777)) return false;
+
+    // Always tradable
+	if (attributes.includes(195)) return true;
+
+    // Not tradable
+	if (attributes.includes(153)) return false;
+
+    // Items with origin Achievement, Foreign, Preview or SteamWorkshopContribution are not tradable
+    if ([1, 14, 17, 18].includes(item.origin)) return false;
+
+    // Items with quality Self-Made, Valve or Community are not tradable
+    if ([7, 8, 9].includes(item.quality)) return false; 
+
+    // Explicitly marked as not tradable
+    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade) return false;
+
+    return true;
 }
