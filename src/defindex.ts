@@ -1,6 +1,6 @@
 // TODO: seperate into files etc cleanup
-import { spellIndexes } from "./data";
-import { Attribute, InterpretedAttributes, Interpreters } from "./types";
+import { eEconItemFlags, spellIndexes } from "./data";
+import { Attribute, BackpackEntry, InterpretedAttributes, Interpreters } from "./types";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -54,6 +54,13 @@ const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     2053: ["festivized", getBool],
 };
 
+export function parseItem(item: BackpackEntry) {
+    const attributes = parseAttributes(item.attribute);
+    const craftable = isUsableInCrafting(item);
+    const tradable = isTradable(item);
+    return { ...attributes, craftable, tradable };
+}
+
 export function parseAttributes(itemAttributes: Attribute[])  {
     let parsed = {} as InterpretedAttributes;
     for (const attribute of itemAttributes) {
@@ -77,4 +84,38 @@ export function parseAttributes(itemAttributes: Attribute[])  {
     }
 
     return parsed;
+}
+
+export function isUsableInCrafting(item: BackpackEntry) {
+    const attributes = item.attribute.map(a => a.def_index);
+
+    // Not part of economy (also as attribute 777 but unused)
+    if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy ) return false;
+
+    // Always tradable = always craftable
+    if (attributes.includes(195)) return true;
+
+    // Never craftable
+    if (attributes.includes(449)) return false;
+
+    // Items with an expiration date or preview items are not craftable
+    if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
+
+    // Explicitly marked as not craftable
+    if (item.flags == eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting ) return false;
+
+    // Items with origin Invalid, Foreign, StorePromotion or SteamWorkshopContribution are not craftable
+    if ([5, 14, 17, 18].includes(item.origin)) return false;
+
+    // Purchased items (also as attribute 172 but unused) can be used in crafting if explicitly tagged, but not by default
+    if (item.origin == 2 && eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) return false;
+
+    // Items with quality Self-Made or Community are not craftable
+    if ([7, 9].includes(item.quality)) return false; 
+
+    return true;
+}
+
+export function isTradable(item: BackpackEntry) {
+    return false;
 }

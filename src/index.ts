@@ -1,4 +1,4 @@
-import {  parseAttributes } from "./defindex";
+import { parseItem } from "./defindex";
 import { convertToStrings } from "./stringifier";
 import { InterpretedAttributes, Item, MainAttributes, NodeTF2Backpack } from "./types";
 
@@ -9,7 +9,7 @@ export default function parseBackpack(backpack: NodeTF2Backpack, mapToString = f
         assetid: item.id,
         defindex: item.def_index,
         quality: item.quality
-    }, parseAttributes(item.attribute)));
+    }, parseItem(item) ));
     
     if (!mapToString) return bp;
 

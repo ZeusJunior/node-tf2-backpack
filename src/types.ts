@@ -39,8 +39,8 @@ export type InterpretedAttributes<T extends number | string = number> = {
     spells?: T[];
     parts?: T[];
     effect?: number;
-    // craftable: boolean;
-    // tradable: boolean;
+    craftable: boolean;
+    tradable: boolean;
     australium?: boolean;
     festivized?: boolean;
     sheen?: T;
@@ -66,8 +66,6 @@ export type Interpreters =
 Interpreter<'spells'> |
 Interpreter<'parts'> |
 Interpreter<'effect'> |
-// Interpreter<'craftable'> |
-// Interpreter<'tradable'> |
 Interpreter<'australium'> |
 Interpreter<'festivized'> |
 Interpreter<'sheen'> |

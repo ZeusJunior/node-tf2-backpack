@@ -1,3 +1,16 @@
+// Where is flag 20??
+export enum eEconItemFlags {
+	kEconItemFlag_CannotTrade									= 1 << 0,
+	kEconItemFlag_CannotBeUsedInCrafting						= 1 << 1,
+	kEconItemFlag_CanBeTradedByFreeAccounts						= 1 << 2,
+	kEconItemFlag_NonEconomy									= 1 << 3,		// used for items that are meant to not interact in the economy -- these can't be traded, gift-wrapped, crafted, etc.
+	kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012	= 1 << 4,		// cosmetic items coming from the store are now usable in crafting; this flag is set on all items purchased from the store after this change was made
+	kEconItemFlagClient_ForceBlueTeam							= 1 << 5,
+	kEconItemFlagClient_StoreItem								= 1 << 6,
+	kEconItemFlagClient_Preview									= 1 << 7,		// only set on the client; means "this item is being previewed"
+	kEconItemFlags_CheckFlags_AllGCFlags						= kEconItemFlag_CannotTrade | kEconItemFlag_CannotBeUsedInCrafting | kEconItemFlag_CanBeTradedByFreeAccounts | kEconItemFlag_NonEconomy | kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012,
+};
+
 export const parts: Record<number, string> = {
     // 0: "Kills",
     // 1: "Ubers",
