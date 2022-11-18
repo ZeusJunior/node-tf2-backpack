@@ -135,6 +135,10 @@ export function isCraftable(item: BackpackEntry) {
 
 // Note: also attribute 172 but unused
 export function isTradable(item: BackpackEntry) {
+    // These items are always untradable I have not found any similarities between them so just going by defindex
+    // Party Hat, Birthday Noisemaker, Spirit of Giving, Professor Speks
+    if ([537, 536, 655, 343].includes(item.def_index)) return false;
+
     const attributes = item.attribute.map(a => a.def_index);
 
     // Tradable after x, check if x is in the future
@@ -170,9 +174,13 @@ export function isTradable(item: BackpackEntry) {
     if ([7, 8, 9].includes(item.quality)) return false; 
     
     // Explicitly marked as not tradable
-    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade || item.flags == 5) return false;
-    if (item.flags == 0 && item.origin == 0) return false
-    // if ((eEconItemFlags.kEconItemFlag_CannotTrade & item.flags) != 0) return false;
+    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade) return false;
+
+    // Has a kill_eater_3 attribute and is a timed drop, this is a Soul Gargoyle
+    if (attributes.includes(494) && item.origin == 0) return false;
+
+    // Has a set_employee_number attribute and is a timed drop, this is a Mercenary Badge
+    if (attributes.includes(143) && item.origin == 0) return false;
 
     return true;
 }
