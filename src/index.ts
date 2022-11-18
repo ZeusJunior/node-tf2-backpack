@@ -15,4 +15,3 @@ export default function parseBackpack(backpack: NodeTF2Backpack, mapToString = f
 
     return convertToStrings(bp);
 }
-
