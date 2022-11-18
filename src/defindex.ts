@@ -122,8 +122,8 @@ export function isCraftable(item: BackpackEntry) {
     // Has a tool_target_item attribute, this is either a killstreak kit or an unusualifier
     if (attributes.includes(2012)) return false;
 
-    // Has a kill_eater_3 attribute, this is a Soul Gargoyle
-    if (attributes.includes(494)) return false;
+    // Has a kill_eater_3 attribute and is a timed drop, this is a Soul Gargoyle
+    if (attributes.includes(494) && item.origin == 0) return false;
 
     // Has a items_traded_in_for attribute with a value equal to 5, this is PROBABLY a stat clock.
     // Other trade-ups that are not stat clocks can have this attribute, but they have a different value.
@@ -135,10 +135,6 @@ export function isCraftable(item: BackpackEntry) {
 
 // Note: also attribute 172 but unused
 export function isTradable(item: BackpackEntry) {
-    // These items are always untradable I have not found any similarities between them so just going by defindex
-    // Party Hat, Birthday Noisemaker, Spirit of Giving, Professor Speks
-    if ([537, 536, 655, 343].includes(item.def_index)) return false;
-
     const attributes = item.attribute.map(a => a.def_index);
 
     // Tradable after x, check if x is in the future
@@ -147,6 +143,7 @@ export function isTradable(item: BackpackEntry) {
 
     // Not part of economy (also as attribute 777 but unused)
     if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy ) return false;
+    // if ((eEconItemFlags.kEconItemFlag_NonEconomy & item.flags) != 0) return false;
 
 	// Order matters, always tradable overrides not tradable.
     // 777 NonEconomy should be unused but just in case
@@ -173,13 +170,9 @@ export function isTradable(item: BackpackEntry) {
     if ([7, 8, 9].includes(item.quality)) return false; 
     
     // Explicitly marked as not tradable
-    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade) return false;
-
-    // Has a kill_eater_3 attribute, this is a Soul Gargoyle
-    if (attributes.includes(494)) return false;
-
-    // Has a set_employee_number attribute, this is a Mercenary Badge
-    if (attributes.includes(143)) return false;
+    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade || item.flags == 5) return false;
+    if (item.flags == 0 && item.origin == 0) return false
+    // if ((eEconItemFlags.kEconItemFlag_CannotTrade & item.flags) != 0) return false;
 
     return true;
 }

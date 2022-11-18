@@ -1,4 +1,3 @@
-// Where are flag 20 and flag 0 ??
 export enum eEconItemFlags {
 	kEconItemFlag_CannotTrade									= 1 << 0,
 	kEconItemFlag_CannotBeUsedInCrafting						= 1 << 1,
