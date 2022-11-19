@@ -27,7 +27,42 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             prop.alwaysTradable = true;
         }
 
-        defindexMap[defindex] = prop;
+        if (item.capabilities?.can_craft_if_purchased) {
+            shouldAdd = true;
+            prop.canCraftIfPurchased = true;
+        }
+
+        if (item.prefab) {
+            // Never craftable
+            if (
+                item.prefab.includes('unusualifier_base') ||
+                item.prefab.includes('killstreakifier_base') ||
+                item.prefab.includes('killstreakifier_kit_basic')
+            ) {
+                shouldAdd = true;
+                prop.nonCraftable = true;
+            }
+
+            // Always tradable
+            if (item.prefab.includes('paint_can_team_color')) {
+                shouldAdd = true;
+                prop.alwaysTradable = true;
+            }
+
+            // Cannot trade
+            if (
+                item.prefab.includes('tournament_medal') ||
+                item.prefab.includes('promo') ||
+                item.prefab.includes('score_reward_hat ')
+            ) {
+                shouldAdd = true;
+                prop.nonTradeable = true;
+            }
+        }
+
+        if (shouldAdd) {
+            defindexMap[defindex] = prop;
+        }
     }
     return defindexMap;
 }

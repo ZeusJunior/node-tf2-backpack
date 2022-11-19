@@ -86,16 +86,11 @@ export function parseAttributes(itemAttributes: Attribute[])  {
     return parsed;
 }
 
-// TODO: Some origin StorePromotion (5) are craftable, such as Mann Co. Store Package. Need to find a way to differentiate
-export function isCraftable(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
-    // These items are always uncraftable I have not found any similarities between them so just going by defindex
-    // Festivizer
-    if ([5839].includes(item.def_index)) return false;
-
+export function isCraftable(item: BackpackEntry, schema?: SchemaImposedProperties) {
     const attributes = item.attribute.map(a => a.def_index);
 
     // Not part of economy (also as attribute 777 but unused)
-    if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy) return false;
+    if ((item.flags & eEconItemFlags.kEconItemFlag_NonEconomy) != 0) return false;
 
     // Always tradable = always craftable
     if (attributes.includes(195) || schema?.alwaysTradable) return true;
@@ -107,37 +102,26 @@ export function isCraftable(item: BackpackEntry, schema: SchemaImposedProperties
     if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
 
     // Explicitly marked as not craftable
-    if (item.flags == eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting ) return false;
+    if ((eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting & item.flags) != 0) return false;
 
     // Items with origin StorePromotion, Foreign, Preview or SteamWorkshopContribution are not craftable
     if ([5, 14, 17, 18].includes(item.origin)) return false;
 
     // Purchased items (also as attribute 172 but unused) can be used in crafting if explicitly tagged, but not by default
-    if (item.origin == 2 && eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) return false;
+    if (item.origin == 2)  {
+        if ((item.flags & eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) == 0) return false;
+        // TODO: true?
+        if (schema?.canCraftIfPurchased) return false;
+    }
 
     // Items with quality Self-Made, Valve or Community are not craftable
     if ([7, 8, 9].includes(item.quality)) return false; 
-
-    // Has a tool_target_item attribute, this is either a killstreak kit or an unusualifier
-    if (attributes.includes(2012)) return false;
-
-    // Has a kill_eater_3 attribute and is a timed drop, this is a Soul Gargoyle
-    if (attributes.includes(494) && item.origin == 0) return false;
-
-    // Has a items_traded_in_for attribute with a value equal to 5, this is PROBABLY a stat clock.
-    // Other trade-ups that are not stat clocks can have this attribute, but they have a different value.
-    const itemsTradedInFor = getAttribute(item.attribute, 748);
-    if (itemsTradedInFor && getInt(Buffer.from(itemsTradedInFor.value_bytes.data)) == 5) return false;
 
     return true;
 }
 
 // Note: also attribute 172 but unused
 export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
-    // These items are always untradable I have not found any similarities between them so just going by defindex
-    // Party Hat, Birthday Noisemaker, Spirit of Giving, Professor Speks
-    if ([537, 536, 655, 343].includes(item.def_index)) return false;
-
     const attributes = item.attribute.map(a => a.def_index);
 
     // Tradable after x, check if x is in the future
@@ -145,10 +129,9 @@ export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties 
     if (TradableAfter && getInt(Buffer.from(TradableAfter.value_bytes.data)) > Math.floor(Date.now() / 1000) ) return false;
 
     // Not part of economy (also as attribute 777 but unused)
-    if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy ) return false;
-    // if ((eEconItemFlags.kEconItemFlag_NonEconomy & item.flags) != 0) return false;
+    if ((item.flags & eEconItemFlags.kEconItemFlag_NonEconomy) != 0) return false;
 
-	// Order matters, always tradable overrides not tradable.
+	// Order matters, always tradable overrides cannot trade.
     // 777 NonEconomy should be unused but just in case
 	if (attributes.includes(777)) return false;
 
@@ -156,30 +139,19 @@ export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties 
 	if (attributes.includes(195) || schema?.alwaysTradable) return true;
 
     // Not tradable
-    // I would check if this value equals 1 but items from the Christmas Stocking (giftapult, random weapon, paint etc)
-    // have this attribute set to 0 and are not tradable
-    // Checking if free accounts can trade seems to fix FishCake, SpaceChem Pin and a handful of random items
-	if (attributes.includes(153) && item.flags != eEconItemFlags.kEconItemFlag_CanBeTradedByFreeAccounts) return false;
+	if (attributes.includes(153) || schema?.nonTradeable) return false;
 
     // Items with origin Achievement, Foreign, Preview or SteamWorkshopContribution are not tradable
     if ([1, 14, 17, 18].includes(item.origin)) return false;
 
-    // Store Promotion items can be traded if explicitly tagged, but not by default
-    // Yes this says Purchased and Craftability, but it seems to only apply to Mann Co. Caps
-    // TODO: later note: Yeah nevermind check item 12243104687. Cow mangler purchased, strangified and killstreakified also has this...
-    if (item.origin == 5 && eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) return false;
+    // Items with an expiration date or preview items are not tradable
+    if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
 
     // Items with quality Self-Made, Valve or Community are not tradable
     if ([7, 8, 9].includes(item.quality)) return false; 
     
     // Explicitly marked as not tradable
     if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade || schema?.nonTradeable) return false;
-
-    // Has a kill_eater_3 attribute and is a timed drop, this is a Soul Gargoyle
-    if (attributes.includes(494) && item.origin == 0) return false;
-
-    // Has a set_employee_number attribute and is a timed drop, this is a Mercenary Badge
-    if (attributes.includes(143) && item.origin == 0) return false;
 
     return true;
 }

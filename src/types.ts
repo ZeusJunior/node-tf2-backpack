@@ -85,7 +85,8 @@ export type SchemaImposedProperties = {
     nonTradeable?: true,
     nonCraftable?: true,
     alwaysTradable?: true,
-    nonEconomy?: true // pretty sure this one doesnt appear as an imposed schema property
+    nonEconomy?: true, // pretty sure this one doesnt appear as an imposed schema property
+    canCraftIfPurchased?: true
 }
 
 export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};
@@ -108,5 +109,10 @@ type ItemsGameItem = {
     static_attrs?: {
         [key: string]: string
     },
+    // needed to check if craftable if purchased
+    capabilities?: {
+        [key: string]: string
+    },
+    prefab?: string
     [key: string]: any
 }
