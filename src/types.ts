@@ -80,3 +80,33 @@ Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
 Interpreter<'lowcraft'>;
+
+export type SchemaImposedProperties = {
+    nonTradeable?: true,
+    nonCraftable?: true,
+    alwaysTradable?: true,
+    nonEconomy?: true // pretty sure this one doesnt appear as an imposed schema property
+}
+
+export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};
+
+export type ItemsGame = {
+    items: Record<number, ItemsGameItem> 
+    [key: string]: object
+}
+// inciomplete definition because we only need these
+
+type ItemsGameItem = {
+    // theres no guarantee any of these will be there
+    attributes?: {
+        [key: string]: {
+            attribute_class: string,
+            value: string
+        }
+    },
+    // theres two attributes properties, apparently attributes is old according to comments?
+    static_attrs?: {
+        [key: string]: string
+    },
+    [key: string]: any
+}

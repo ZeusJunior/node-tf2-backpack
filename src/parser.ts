@@ -1,6 +1,6 @@
 // TODO: seperate into files etc cleanup
 import { eEconItemFlags, spellIndexes } from "./data";
-import { Attribute, BackpackEntry, InterpretedAttributes, Interpreters } from "./types";
+import { Attribute, BackpackEntry, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -8,7 +8,6 @@ const getInt = (data: Buffer) => data.readUInt32LE(0);
 const getBool = (data: Buffer) => Math.round(getFloat(data)) !== 0;
 const getHexStringFromFloat = (data: Buffer) => getFloat(data).toString(16);
 const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
-
 
 /**
  * Handler for attribute defindexes:
@@ -31,7 +30,7 @@ const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
     return [spellIndexes[attribute.def_index][spell]];
  };
 
-const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
+export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     /* Unusual effect */
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
@@ -55,10 +54,10 @@ const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     2053: ["festivized", getBool],
 };
 
-export function parseItem(item: BackpackEntry) {
+export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
     const attributes = parseAttributes(item.attribute);
-    const craftable = isCraftable(item);
-    const tradable = isTradable(item);
+    const craftable = isCraftable(item, schema);
+    const tradable = isTradable(item, schema);
     return { ...attributes, craftable, tradable };
 }
 
@@ -88,7 +87,7 @@ export function parseAttributes(itemAttributes: Attribute[])  {
 }
 
 // TODO: Some origin StorePromotion (5) are craftable, such as Mann Co. Store Package. Need to find a way to differentiate
-export function isCraftable(item: BackpackEntry) {
+export function isCraftable(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
     // These items are always uncraftable I have not found any similarities between them so just going by defindex
     // Festivizer
     if ([5839].includes(item.def_index)) return false;
@@ -99,10 +98,10 @@ export function isCraftable(item: BackpackEntry) {
     if (item.flags == eEconItemFlags.kEconItemFlag_NonEconomy) return false;
 
     // Always tradable = always craftable
-    if (attributes.includes(195)) return true;
+    if (attributes.includes(195) || schema?.alwaysTradable) return true;
 
     // Never craftable
-    if (attributes.includes(449)) return false;
+    if (attributes.includes(449) || schema?.nonCraftable) return false;
 
     // Items with an expiration date or preview items are not craftable
     if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
@@ -134,7 +133,7 @@ export function isCraftable(item: BackpackEntry) {
 }
 
 // Note: also attribute 172 but unused
-export function isTradable(item: BackpackEntry) {
+export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
     // These items are always untradable I have not found any similarities between them so just going by defindex
     // Party Hat, Birthday Noisemaker, Spirit of Giving, Professor Speks
     if ([537, 536, 655, 343].includes(item.def_index)) return false;
@@ -154,7 +153,7 @@ export function isTradable(item: BackpackEntry) {
 	if (attributes.includes(777)) return false;
 
     // Always tradable
-	if (attributes.includes(195)) return true;
+	if (attributes.includes(195) || schema?.alwaysTradable) return true;
 
     // Not tradable
     // I would check if this value equals 1 but items from the Christmas Stocking (giftapult, random weapon, paint etc)
@@ -174,7 +173,7 @@ export function isTradable(item: BackpackEntry) {
     if ([7, 8, 9].includes(item.quality)) return false; 
     
     // Explicitly marked as not tradable
-    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade) return false;
+    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade || schema?.nonTradeable) return false;
 
     // Has a kill_eater_3 attribute and is a timed drop, this is a Soul Gargoyle
     if (attributes.includes(494) && item.origin == 0) return false;
