@@ -29,8 +29,6 @@ function isDefined(i: any): i is {} {
 
 
 export function convertToStrings(items: Item<number>[]): Item<string>[] {
-    // TODO: convert to string with getWearName, getKillstreakTierName, getKillstreakerName, getSheenName, getPartName, getSpellName
-    
     return items.map(stringify);
 }
 
