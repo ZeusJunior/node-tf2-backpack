@@ -30,3 +30,13 @@ parseBackpack(backpack: NodeTF2Backpack, mapToString = false): Item<string | num
 - `backpack` - `backpack` property from node-tf2. See [the docs](https://github.com/DoctorMcKay/node-tf2#backpack).
 - `mapToString` - set to true to return spells, parts, sheen, killstreaker, killstreakTier and wear as names instead of IDs
 - Returns `Item<string | number>[]`
+
+## Other 
+
+Since there are no standardized skus for some properties, this module also provides the following exports:
+- spellNames - spell defindex to name
+- sheens
+- killstreakers
+- parts - strange parts
+
+
