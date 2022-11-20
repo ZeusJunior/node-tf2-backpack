@@ -110,8 +110,7 @@ export function isCraftable(item: BackpackEntry, schema?: SchemaImposedPropertie
     // Purchased items (also as attribute 172 but unused) can be used in crafting if explicitly tagged, but not by default
     if (item.origin == 2)  {
         if ((item.flags & eEconItemFlags.kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012) == 0) return false;
-        // TODO: true?
-        if (schema?.canCraftIfPurchased) return false;
+        if (!schema?.canCraftIfPurchased) return false;
     }
 
     // Items with quality Self-Made, Valve or Community are not craftable

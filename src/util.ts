@@ -33,30 +33,55 @@ export function parseItemsGame(itemsGame: ItemsGame) {
         }
 
         if (item.prefab) {
+            const prefab = item.prefab.split(' ');
             // Never craftable
             if (
-                item.prefab.includes('unusualifier_base') ||
-                item.prefab.includes('killstreakifier_base') ||
-                item.prefab.includes('killstreakifier_kit_basic')
+                prefab.includes('unusualifier_base') ||
+                prefab.includes('killstreakifier_base') ||
+                prefab.includes('killstreakifier_kit_basic') // implements killstreakifier_base
             ) {
                 shouldAdd = true;
                 prop.nonCraftable = true;
             }
 
             // Always tradable
-            if (item.prefab.includes('paint_can_team_color')) {
+            if (prefab.includes('paint_can_team_color')) {
                 shouldAdd = true;
                 prop.alwaysTradable = true;
             }
 
             // Cannot trade
             if (
-                item.prefab.includes('tournament_medal') ||
-                item.prefab.includes('promo') ||
-                item.prefab.includes('score_reward_hat ')
+                prefab.includes('tournament_medal') ||
+                prefab.includes('promo') ||
+                prefab.includes('score_reward_hat ') // implements promo and hat (capability)
             ) {
                 shouldAdd = true;
                 prop.nonTradeable = true;
+            }
+
+            // Prefabs also have capabilities because yeah why make this easy to decypher
+            if (
+                prefab.includes('cosmetic') ||
+                prefab.includes('taunt') ||
+                prefab.includes('map_token') ||
+                prefab.includes('triad_trinket') ||
+                prefab.includes('champ_stamp') ||
+                prefab.includes('marxman') ||
+                prefab.includes('cannonball') ||
+                prefab.includes('misc') || // implements cosmetic
+                prefab.includes('hat') || // implements cosmetic
+                prefab.includes('hat_decoration') || // implements cosmetic
+                prefab.includes('mask') || // implements misc
+                prefab.includes('beard') || // implements misc
+                prefab.includes('backpack') || // implements misc
+                prefab.includes('grenades') || // implements misc
+                prefab.includes('item_bak_firefly') || // implements misc
+                prefab.includes('item_bak_fear_monger') || // implements hat
+                prefab.includes('item_bak_arkham_cowl') // implements hat
+            ) {
+                shouldAdd = true;
+                prop.canCraftIfPurchased = true;
             }
         }
 
