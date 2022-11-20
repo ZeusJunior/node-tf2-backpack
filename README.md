@@ -17,11 +17,13 @@ const parser = new tf2backpack.BackpackParser(itemsGame);
 
 # Docs
 ### Constructor(itemsGame)
-- `itemsGame` - `itemSchema` property from node-tf2. See [the docs](https://github.com/DoctorMcKay/node-tf2#itemschema).
+- `itemsGame` - `itemSchema` property from node-tf2. See [the docs](https://github.com/DoctorMcKay/node-tf2#itemschema).  
 Constructs a new BackpackParser.  
 It is recommended that you ***save*** the itemSchema. It is not emitted on every connection, as it is cached. Currently working on figuring out a way to maybe force a refresh, but no promises.  
 
-Alternatively, you can also use any vdf parser module and use `items_game` from `items_game.txt` (you can find this [here](https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt) or [the schema](https://wiki.teamfortress.com/wiki/WebAPI/GetSchema) as items_game_url) as input. It is the same
+Alternatively, you can also use any vdf parser module and use `items_game` from `items_game.txt` (you can find this [here](https://raw.githubusercontent.com/SteamDatabase/GameTracking-TF2/master/tf/scripts/items/items_game.txt) or the [schema](https://wiki.teamfortress.com/wiki/WebAPI/GetSchema) as items_game_url) as input.  
+Or [items-game.json](https://raw.githubusercontent.com/danocmx/node-tf2-static-schema/master/static/items-game.json) from [node-tf2-static-schema](https://github.com/danocmx/node-tf2-static-schema)  
+They're the same  
 
 ### parseBackpack
 ```ts
