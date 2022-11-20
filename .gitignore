@@ -103,7 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# datasets for generating tests
-scripts/test-generator/steambackpack/
-scripts/test-generator/tf2backpack/
-scripts/test-generator/datasets/
+# I stored some inventory dumps here 
+data

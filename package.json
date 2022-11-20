@@ -2,7 +2,8 @@
   "name": "tf2-backpack",
   "version": "0.0.1",
   "description": "Parses the backpack from node-tf2",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
     "test": "jest"
@@ -11,7 +12,7 @@
     "type": "git",
     "url": "git+https://github.com/ZeusJunior/node-tf2-backpack.git"
   },
-  "author": "",
+  "author": "ZeusJunior/Moder112",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ZeusJunior/node-tf2-backpack/issues"
