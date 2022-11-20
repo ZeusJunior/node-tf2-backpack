@@ -24,3 +24,5 @@ export class BackpackParser {
         return convertToStrings(bp);
     }
 }
+
+export * from './data';
