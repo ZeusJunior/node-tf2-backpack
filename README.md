@@ -2,7 +2,7 @@
 Typed module to parse the `backpack` property from [node-tf2](https://github.com/DoctorMcKay/node-tf2).  
 Using this you no longer have to retrieve your own (bots) backpack from the steam API, which has been having issues with increasing ratelimits.
 
-# Installation (soon)
+# Installation
 ```
 npm install tf2-backpack
 ```
