@@ -54,6 +54,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     wear?: T;
     paintkit?: number;
     lowcraft?: number;
+    target?: number;
 };
 
 export type MainAttributes = {
@@ -79,7 +80,8 @@ Interpreter<'paint'> |
 Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
-Interpreter<'lowcraft'>;
+Interpreter<'lowcraft'> |
+Interpreter<'target'>
 
 export type SchemaImposedProperties = {
     nonTradeable?: true,

@@ -47,6 +47,7 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     1009: ["spells", getSpell],
     725: ["wear", getFloat],
     834: ["paintkit", getInt],
+    2012: ["target", getFloat],
     2013: ["killstreaker", getFloat],
     2014: ["sheen", getFloat],
     2025: ["killstreakTier", getFloat],
