@@ -26,3 +26,5 @@ export class BackpackParser {
 }
 
 export * from './data';
+
+export {Item, ItemsGame, BackpackEntry, NodeTF2Backpack} from './types';
