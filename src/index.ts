@@ -4,7 +4,7 @@ import { InterpretedAttributes, Item, ItemsGame, MainAttributes, NodeTF2Backpack
 import { parseItemsGame } from "./util";
 
 
-export default class BackpackParser {
+export class BackpackParser {
     schemaLookup: SchemaLookup;
     constructor(itemsGame: ItemsGame) {
         this.schemaLookup = parseItemsGame(itemsGame);
