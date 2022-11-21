@@ -8,6 +8,12 @@ const getInt = (data: Buffer) => data.readUInt32LE(0);
 const getBool = (data: Buffer) => Math.round(getFloat(data)) !== 0;
 const getHexStringFromFloat = (data: Buffer) => getFloat(data).toString(16);
 const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
+// dirty way of extracting data for fabricators, defindex is stored at the tail of the last recipe attribute (any 2000 - 2010)
+// might be a protobuf but we haven't found a definition yet
+const getTargetFromBS = (data: Buffer) => {
+    return parseInt(data.toString('utf8', data.lastIndexOf(124), data.length - 4));
+}
+
 
 /**
  * Handler for attribute defindexes:
@@ -39,14 +45,26 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     380: ["parts", getIntFromFloatAsArray],
     382: ["parts", getIntFromFloatAsArray],
     384: ["parts", getIntFromFloatAsArray],
+    725: ["wear", getFloat],
+    834: ["paintkit", getInt],
     1004: ["spells", getSpell],
     1005: ["spells", getSpell],
     1006: ["spells", getSpell],
     1007: ["spells", getSpell],
     1008: ["spells", getSpell],
     1009: ["spells", getSpell],
-    725: ["wear", getFloat],
-    834: ["paintkit", getInt],
+    2000: ['target', getTargetFromBS],
+    2001: ['target', getTargetFromBS],
+    2002: ['target', getTargetFromBS],
+    2003: ['target', getTargetFromBS],
+    2004: ['target', getTargetFromBS],
+    2005: ['target', getTargetFromBS],
+    2006: ['target', getTargetFromBS],
+    2007: ['target', getTargetFromBS],
+    2008: ['target', getTargetFromBS],
+    2009: ['target', getTargetFromBS],
+    2010: ['target', getTargetFromBS],
+    2012: ["target", getFloat],
     2013: ["killstreaker", getFloat],
     2014: ["sheen", getFloat],
     2025: ["killstreakTier", getFloat],
