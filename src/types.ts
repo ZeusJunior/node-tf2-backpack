@@ -57,6 +57,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     target?: number;
     // whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
     hasKillEater?: boolean;
+    elevated?: boolean;
 };
 
 export type MainAttributes = {
