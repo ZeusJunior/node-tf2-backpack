@@ -75,14 +75,14 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
 };
 
 export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
-    const attributes = parseAttributes(item.attribute);
+    const { hasKillEater, ...attributes } = parseAttributes(item.attribute);
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {
         ...attributes,
         craftable,
         tradable,
-        elevated: attributes.hasKillEater && item.quality !== 11, // counts kills but isn't strange? elevated quality
+        elevated: hasKillEater && item.quality !== 11, // counts kills but isn't strange? elevated quality
     };
 }
 

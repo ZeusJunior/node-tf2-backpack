@@ -66,7 +66,7 @@ export type MainAttributes = {
     quality: number;
 };
 
-export type Item<T extends number | string> = MainAttributes & InterpretedAttributes<T>;
+export type Item<T extends number | string> = MainAttributes & Omit<InterpretedAttributes<T>, 'hasKillEater'>;
 
 export type Interpreter<T extends keyof InterpretedAttributes> = [T, (data: Buffer, attribute?: Attribute) => InterpretedAttributes[T]];
 
