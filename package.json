@@ -1,6 +1,6 @@
 {
   "name": "tf2-backpack",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Parses the backpack from node-tf2",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
