@@ -6,6 +6,7 @@ const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
 const getInt = (data: Buffer) => data.readUInt32LE(0);
 const getBool = (data: Buffer) => Math.round(getFloat(data)) !== 0;
+const exists = () => true;
 const getHexStringFromFloat = (data: Buffer) => getFloat(data).toString(16);
 const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
 // dirty way of extracting data for fabricators, defindex is stored at the tail of the last recipe attribute (any 2000 - 2010)
@@ -40,8 +41,9 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     /* Unusual effect */
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
-    261: ["paint_other", getHexStringFromFloat],
+    214: ["hasKillEater", exists],
     229: ["lowcraft", getInt],
+    261: ["paint_other", getHexStringFromFloat],
     380: ["parts", getIntFromFloatAsArray],
     382: ["parts", getIntFromFloatAsArray],
     384: ["parts", getIntFromFloatAsArray],
@@ -76,7 +78,12 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
     const attributes = parseAttributes(item.attribute);
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
-    return { ...attributes, craftable, tradable };
+    return {
+        ...attributes,
+        craftable,
+        tradable,
+        elevated: attributes.hasKillEater && item.quality !== 11, // counts kills but isn't strange? elevated quality
+    };
 }
 
 export function parseAttributes(itemAttributes: Attribute[])  {

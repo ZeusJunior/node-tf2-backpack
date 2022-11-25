@@ -55,6 +55,8 @@ export type InterpretedAttributes<T extends number | string = number> = {
     paintkit?: number;
     lowcraft?: number;
     target?: number;
+    // whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
+    hasKillEater?: boolean;
 };
 
 export type MainAttributes = {
@@ -81,7 +83,8 @@ Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
 Interpreter<'lowcraft'> |
-Interpreter<'target'>
+Interpreter<'target'>|
+Interpreter<'hasKillEater'>
 
 export type SchemaImposedProperties = {
     nonTradeable?: true,
