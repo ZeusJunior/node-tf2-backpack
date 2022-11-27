@@ -92,7 +92,7 @@ export function parseAttributes(itemAttributes: Attribute[])  {
         const [name, interpret] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
         if(!name) continue;
 
-        const value = interpret(Buffer.from(attribute.value_bytes.data), attribute);
+        const value = interpret(Buffer.from(attribute.value_bytes), attribute);
         /**
          * if return type is an array then if one exists, we concat
          */
@@ -150,7 +150,7 @@ export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties 
 
     // Tradable after x, check if x is in the future
     const TradableAfter = getAttribute(item.attribute, 211);
-    if (TradableAfter && getInt(Buffer.from(TradableAfter.value_bytes.data)) > Math.floor(Date.now() / 1000) ) return false;
+    if (TradableAfter && getInt(Buffer.from(TradableAfter.value_bytes)) > Math.floor(Date.now() / 1000) ) return false;
 
     // Not part of economy (also as attribute 777 but unused)
     if ((item.flags & eEconItemFlags.kEconItemFlag_NonEconomy) != 0) return false;

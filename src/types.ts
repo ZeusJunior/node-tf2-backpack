@@ -26,10 +26,7 @@ export type NodeTF2Backpack = BackpackEntry[];
 export interface Attribute {
     def_index: number;
     value: null; // deprecated
-    value_bytes: {
-        type: "Buffer";
-        data: number[];
-    };
+    value_bytes: Buffer
 };
 
 export interface EquippedState {
