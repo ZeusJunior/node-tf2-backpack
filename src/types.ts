@@ -47,14 +47,18 @@ export type InterpretedAttributes<T extends number | string = number> = {
     killstreaker?: T;
     killstreakTier?: T;
     paint?: string;
-    paint_other?: string; // name TBD, this is the paint hex for BLU team (if the paint is team colored)
+    paint_other?: string; // This is the paint hex for BLU team (if the paint is team colored)
     wear?: T;
     paintkit?: number;
     lowcraft?: number;
     target?: number;
-    // whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
+    // Whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
+    // Not returned in Item type, but used in parseItem
     hasKillEater?: boolean;
     elevated?: boolean;
+    // TODO: Also stringify the attributes in these?
+    outputItem?: FabricatorItem;
+    inputItems?: FabricatorItem[];
 };
 
 export type MainAttributes = {
@@ -62,6 +66,22 @@ export type MainAttributes = {
     defindex: number;
     quality: number;
 };
+
+export type FabricatorItem = {
+    defindex: number,
+    quality: number,
+    componentFlags: number, // TODO: Figure out what this is
+    attributes: {
+        // TODO: Convert the value to buffer and then run through parseItem again or something to enable this
+        // sheen?: number;
+        // killstreaker?: number;
+        // killstreakTier?: number;
+        def_index: number;
+        value: number;
+    }[], // attributesString,
+    numRequired: number,
+    numFulfilled: number
+  }
 
 export type Item<T extends number | string> = MainAttributes & Omit<InterpretedAttributes<T>, 'hasKillEater'>;
 

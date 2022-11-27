@@ -1,6 +1,7 @@
 // TODO: seperate into files etc cleanup
 import { eEconItemFlags, spellIndexes } from "./data";
-import { Attribute, BackpackEntry, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
+import { Attribute, BackpackEntry, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
+import protobuf from 'protobufjs';
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -9,13 +10,53 @@ const getBool = (data: Buffer) => Math.round(getFloat(data)) !== 0;
 const exists = () => true;
 const getHexStringFromFloat = (data: Buffer) => getFloat(data).toString(16);
 const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
-// dirty way of extracting data for fabricators, defindex is stored at the tail of the last recipe attribute (any 2000 - 2010)
-// might be a protobuf but we haven't found a definition yet
-const getTargetFromBS = (data: Buffer) => {
-    return parseInt(data.toString('utf8', data.lastIndexOf(124), data.length - 4));
+
+// example attributesString: '2014|\x01\x02\x01\x03|\x01\x02\x01\x03|7.000000|\x01\x02\x01\x03|\x01\x02\x01\x03|2012|\x01\x02\x01\x03|\x01\x02\x01\x03|572.000000'
+const getFabricatorItem = (attr: Attribute) => {
+    const root = protobuf.loadSync('../proto/gc.proto');
+    const messageType = root.lookupType("CAttribute_DynamicRecipeComponent");
+    const message = messageType.decode(Buffer.from(attr.value_bytes));
+    const object = messageType.toObject(message);
+
+    // For consistency
+    object.defindex = object.defIndex;
+    delete object.defIndex;
+    object.quality = object.itemQuality;
+    delete object.itemQuality;
+
+    if (object.attributesString) {
+        // excuse the naming here
+        const attrs = object.attributesString.split('|');
+        const wantedAttrs = [];
+        const attributes = [];
+        for (let i = 0; i < attrs.length; i+= 3) {
+            wantedAttrs.push(parseInt(attrs[i]));
+        };
+        for (let i = 0; i < wantedAttrs.length; i+= 2) {
+            attributes.push({
+                def_index: wantedAttrs[i],
+                value: wantedAttrs[i+1]
+            });
+        }
+        object.attributes = attributes;
+    } else {
+        delete object.attributesString;
+        object.attributes = [];
+    }
+
+    return object as FabricatorItem;
 }
 
-
+/**
+ * {
+  defIndex: 0,
+  itemQuality: 6,
+  componentFlags: 24,
+  attributesString: '2025|\x01\x02\x01\x03|\x01\x02\x01\x03|1',
+  numRequired: 1,
+  numFulfilled: 0
+}
+ */
 /**
  * Handler for attribute defindexes:
  * 1004 paint
@@ -29,13 +70,13 @@ const getTargetFromBS = (data: Buffer) => {
  * return type is an array of a single spell defindex, eg return [8917];
  * referece: https://pastebin.com/FR8J0j0J
  */
- const getSpell = (data: Buffer, attribute?: Attribute) => {
+const getSpell = (data: Buffer, attribute?: Attribute) => {
     if (!attribute) return [0]; // This should never happen, but typescript wants attribute to be optional
 
     if ([1006, 1007, 1008, 1009].includes(attribute.def_index)) return [attribute.def_index];
     const spell = getIntFromFloat(data);
     return [spellIndexes[attribute.def_index][spell]];
- };
+};
 
 export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     /* Unusual effect */
@@ -55,17 +96,8 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     1007: ["spells", getSpell],
     1008: ["spells", getSpell],
     1009: ["spells", getSpell],
-    2000: ['target', getTargetFromBS],
-    2001: ['target', getTargetFromBS],
-    2002: ['target', getTargetFromBS],
-    2003: ['target', getTargetFromBS],
-    2004: ['target', getTargetFromBS],
-    2005: ['target', getTargetFromBS],
-    2006: ['target', getTargetFromBS],
-    2007: ['target', getTargetFromBS],
-    2008: ['target', getTargetFromBS],
-    2009: ['target', getTargetFromBS],
-    2010: ['target', getTargetFromBS],
+    // 2000-2009 are for fabricator input/output
+    // 2012 target is for killstreak kits
     2012: ["target", getFloat],
     2013: ["killstreaker", getFloat],
     2014: ["sheen", getFloat],
@@ -86,11 +118,39 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
     };
 }
 
-export function parseAttributes(itemAttributes: Attribute[])  {
+export function parseAttributes(itemAttributes: Attribute[]) {
     let parsed = {} as InterpretedAttributes;
+    const attributes = itemAttributes.map(a => a.def_index);
     for (const attribute of itemAttributes) {
+        // We handle all the input/output attributes when we detect attribute 2000. No need to do the same for the rest
+        if (attribute.def_index >= 2001 && attribute.def_index <= 2009) continue;
+
         const [name, interpret] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
         if(!name) continue;
+
+        // For output for fabricators we need to get the defindex from the last attribute 
+        // The rest is input items (any 2000 - 2009)
+        // We do input and output all at once
+        if (attribute.def_index === 2000) {
+            const fabricatorDefs = attributes.filter((defindex) => {
+                if (defindex >= 2000 && defindex <= 2009) {
+                    return defindex;
+                }
+            });
+            const outputDef = fabricatorDefs.reduce(function (acc, current) {
+                return Math.max(acc, current);
+            });
+
+            const outputItem = getAttribute(itemAttributes, outputDef);
+            if (outputItem) parsed.outputItem = getFabricatorItem(outputItem);
+
+            parsed.inputItems = [];
+            fabricatorDefs.forEach((defindex) => {
+                const inputItem = getAttribute(itemAttributes, defindex);
+                if (inputItem) parsed.inputItems!.push(getFabricatorItem(inputItem));
+            });
+            continue;
+        }
 
         const value = interpret(Buffer.from(attribute.value_bytes), attribute);
         /**

@@ -3,7 +3,6 @@ import { convertToStrings } from "./stringifier";
 import { InterpretedAttributes, Item, ItemsGame, MainAttributes, NodeTF2Backpack, SchemaLookup } from "./types";
 import { parseItemsGame } from "./util";
 
-
 export class BackpackParser {
     schemaLookup: SchemaLookup;
     constructor(itemsGame: ItemsGame) {
