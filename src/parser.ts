@@ -80,8 +80,10 @@ const getSpell = (data: Buffer, attribute?: Attribute) => {
 
 export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     /* Unusual effect */
+    133: ["medalNo", getInt],
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
+    187: ["series", getIntFromFloat],
     214: ["hasKillEater", exists],
     229: ["lowcraft", getInt],
     261: ["paint_other", getHexStringFromFloat],

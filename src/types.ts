@@ -50,7 +50,9 @@ export type InterpretedAttributes<T extends number | string = number> = {
     paint_other?: string; // This is the paint hex for BLU team (if the paint is team colored)
     wear?: T;
     paintkit?: number;
-    lowcraft?: number;
+    lowcraft?: number; // craft number (including > 100)
+    series?: number; // case series
+    medalNo?: number; // medal number
     target?: number;
     // Whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
     // Not returned in Item type, but used in parseItem
@@ -101,6 +103,8 @@ Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
 Interpreter<'lowcraft'> |
+Interpreter<'series'> |
+Interpreter<'medalNo'> |
 Interpreter<'target'>|
 Interpreter<'hasKillEater'>
 
