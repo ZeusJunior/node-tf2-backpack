@@ -125,9 +125,6 @@ export function parseAttributes(itemAttributes: Attribute[]) {
         // We handle all the input/output attributes when we detect attribute 2000. No need to do the same for the rest
         if (attribute.def_index >= 2001 && attribute.def_index <= 2009) continue;
 
-        const [name, interpret] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
-        if(!name) continue;
-
         // For output for fabricators we need to get the defindex from the last attribute 
         // The rest is input items (any 2000 - 2009)
         // We do input and output all at once
@@ -151,6 +148,9 @@ export function parseAttributes(itemAttributes: Attribute[]) {
             });
             continue;
         }
+
+        const [name, interpret] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
+        if(!name) continue;
 
         const value = interpret(Buffer.from(attribute.value_bytes), attribute);
         /**
