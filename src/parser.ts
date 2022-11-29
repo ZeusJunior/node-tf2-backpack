@@ -110,6 +110,11 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
 
 export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties | undefined) {
     const { hasKillEater, ...attributes } = parseAttributes(item.attribute);
+    // crateNo might be imposed by schema lol
+    if(!!schema?.crateNo) {
+        attributes['crateNo'] = schema.crateNo;
+    }
+
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {

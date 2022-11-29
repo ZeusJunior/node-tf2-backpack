@@ -113,7 +113,8 @@ export type SchemaImposedProperties = {
     nonCraftable?: true,
     alwaysTradable?: true,
     nonEconomy?: true, // pretty sure this one doesnt appear as an imposed schema property
-    canCraftIfPurchased?: true
+    canCraftIfPurchased?: true,
+    crateNo?: number,
 }
 
 export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};

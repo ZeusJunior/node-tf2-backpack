@@ -27,6 +27,11 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             prop.alwaysTradable = true;
         }
 
+        if(item.static_attrs?.["set supply crate series"]) {
+            prop.crateNo = parseInt(item.static_attrs["set supply crate series"]);
+            shouldAdd = true;
+        }
+
         if (item.capabilities?.can_craft_if_purchased) {
             shouldAdd = true;
             prop.canCraftIfPurchased = true;
