@@ -113,7 +113,7 @@ export const partDefindexes = Object.keys(parts);
 
 
 export const spellNames: Record<number, string> = {
-    1006: "Voices from Below",
+    1006: "Voices From Below",
     1007: "Pumpkin Bombs",
     1008: "Halloween Fire",
     1009: "Exorcism",
