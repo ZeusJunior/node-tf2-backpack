@@ -50,7 +50,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     paint_other?: string; // This is the paint hex for BLU team (if the paint is team colored)
     wear?: T;
     paintkit?: number;
-    lowcraft?: number; // craft number (including > 100)
+    craft?: number; // craft number (including > 100)
     crateNo?: number; // crate/case series
     medalNo?: number; // medal number
     target?: number;
@@ -102,7 +102,7 @@ Interpreter<'paint'> |
 Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
-Interpreter<'lowcraft'> |
+Interpreter<'craft'> |
 Interpreter<'crateNo'> |
 Interpreter<'medalNo'> |
 Interpreter<'target'>|

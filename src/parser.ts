@@ -85,7 +85,7 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     142: ["paint", getHexStringFromFloat],
     187: ["crateNo", getIntFromFloat],
     214: ["hasKillEater", exists],
-    229: ["lowcraft", getInt],
+    229: ["craft", getInt],
     261: ["paint_other", getHexStringFromFloat],
     380: ["parts", getIntFromFloatAsArray],
     382: ["parts", getIntFromFloatAsArray],
