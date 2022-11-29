@@ -51,7 +51,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     wear?: T;
     paintkit?: number;
     lowcraft?: number; // craft number (including > 100)
-    series?: number; // case series
+    crateNo?: number; // crate/case series
     medalNo?: number; // medal number
     target?: number;
     // Whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
@@ -103,7 +103,7 @@ Interpreter<'paint_other'> |
 Interpreter<'wear'> |
 Interpreter<'paintkit'> |
 Interpreter<'lowcraft'> |
-Interpreter<'series'> |
+Interpreter<'crateNo'> |
 Interpreter<'medalNo'> |
 Interpreter<'target'>|
 Interpreter<'hasKillEater'>
