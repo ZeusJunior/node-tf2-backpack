@@ -169,3 +169,38 @@ export const killstreakers: Record<number, string | undefined> = {
     2007: "Incinerator",
     2008: "Hypno-Beam"
 }
+
+export const mapHexToPaintName = (primaryColor?: string, secondaryColor?: string) => {
+    return {
+        '28394D': 'An Air of Debonair',
+        '18233D': 'Balaclavas Are Forever',
+        'B88035': 'Cream Spirit',
+        '384248': "Operator's Overalls",
+        '5885A2': 'Team Spirit',
+        '256D8D': 'The Value of Teamwork',
+        '839FA3': 'Waterlogged Lab Coat',
+    }[secondaryColor?.toUpperCase() || ''] || {
+        '2F4F4F': 'A Color Similar to Slate',
+        '7D4071': 'A Deep Commitment to Purple',
+        '141414': 'A Distinctive Lack of Hue',
+        'BCDDB3': `A Mann's Mint`,
+        '2D2D24': 'After Eight',
+        '7E7E7E': 'Aged Moustache Grey',
+        'E6E6E6': 'An Extraordinary Abundance of Tinge',
+        'E7B53B': 'Australium Gold',
+        'D8BED8': 'Color No. 216-190-216',
+        'E9967A': 'Dark Salmon Injustice',
+        '808000': 'Drably Olive',
+        '729E42': 'Indubitably Green',
+        'CF7336': 'Mann Co. Orange',
+        'A57545': 'Muskelmannbraun',
+        '51384A': `Noble Hatter's Violet`,
+        'C5AF91': 'Peculiarly Drab Tincture',
+        'FF69B4': 'Pink as Hell',
+        '694D3A': 'Radigan Conagher Brown',
+        '32CD32': 'The Bitter Taste of Defeat and Lime',
+        'F0E68C': `The Color of a Gentlemann's Business Pants`,
+        '7C6C57': 'Ye Olde Rustic Colour',
+        '424F3B': `Zepheniah's Greed`
+    }[primaryColor?.toUpperCase() || ''];
+}
