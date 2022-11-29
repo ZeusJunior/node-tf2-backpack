@@ -1,6 +1,6 @@
 // TODO: seperate into files etc cleanup
 import { eEconItemFlags, spellIndexes } from "./data";
-import { Attribute, BackpackEntry, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
+import { Attribute, BackpackEntry, FabricatorAttribute, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
 import protobuf from 'protobufjs';
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
@@ -38,25 +38,16 @@ const getFabricatorItem = (attr: Attribute) => {
                 value: wantedAttrs[i+1]
             });
         }
-        object.attributes = attributes;
+        object.attributes = parseFabricatorAttributes(attributes);
     } else {
-        delete object.attributesString;
         object.attributes = [];
     }
+
+    delete object.attributesString; // Don't need to return that, we return parsed attributes
 
     return object as FabricatorItem;
 }
 
-/**
- * {
-  defIndex: 0,
-  itemQuality: 6,
-  componentFlags: 24,
-  attributesString: '2025|\x01\x02\x01\x03|\x01\x02\x01\x03|1',
-  numRequired: 1,
-  numFulfilled: 0
-}
- */
 /**
  * Handler for attribute defindexes:
  * 1004 paint
@@ -125,8 +116,27 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
     };
 }
 
+/**
+ * These are attributes we parse from attributesString
+ * They are not Buffers, but numbers. So we can just assign them to the right property
+ */
+export function parseFabricatorAttributes(fabAttribute: FabricatorAttribute[]) {
+    let parsed = {} as InterpretedAttributes;
+    for (const attribute of fabAttribute) {
+        const [name] = ATTRIBUTE_HANDLERS[attribute.def_index] ?? [];
+        if(!name) continue;
+
+        // Trust me
+        // @ts-ignore
+        parsed[name] = attribute.value;
+    }
+
+    return parsed;
+}
+
 export function parseAttributes(itemAttributes: Attribute[]) {
     let parsed = {} as InterpretedAttributes;
+
     const attributes = itemAttributes.map(a => a.def_index);
     for (const attribute of itemAttributes) {
         // We handle all the input/output attributes when we detect attribute 2000. No need to do the same for the rest

@@ -1,5 +1,5 @@
 import { spellNames, parts, sheens, killstreakers } from "./data";
-import { InterpretedAttributes, Item } from "./types";
+import { FabricatorItem, InterpretedAttributes, Item } from "./types";
 
 const getSpellName = (spell: number) => spellNames[spell];
 const getPartName = (part: number) => parts[part];
@@ -40,5 +40,17 @@ function stringify(item: Item<number>): Item<string> {
         killstreaker: getKillstreakerName(item.killstreaker),
         killstreakTier: getKillstreakTierName(item.killstreakTier),
         wear: getWearName(item.wear),
+        outputItem: item.outputItem && stringifyFabricatorItem(item.outputItem),
+        inputItems: item.inputItems?.map((item) => stringifyFabricatorItem(item))
     });
 }
+
+function stringifyFabricatorItem(item: FabricatorItem<number>): FabricatorItem<string> {
+    return Object.assign(item, { 
+            attributes: {
+            sheen: getSheenName(item.attributes.sheen),
+            killstreaker: getKillstreakerName(item.attributes.killstreaker),
+            killstreakTier: getKillstreakTierName(item.attributes.killstreakTier)
+        }
+    });
+};
