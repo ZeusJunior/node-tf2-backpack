@@ -58,6 +58,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     crateNo?: number; // crate/case series
     medalNo?: number; // medal number
     target?: number;
+    series?: number; // chemistry set series
     // Whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
     // Not returned in Item type, but used in parseItem
     hasKillEater?: boolean;
@@ -107,7 +108,8 @@ Interpreter<'craft'> |
 Interpreter<'crateNo'> |
 Interpreter<'medalNo'> |
 Interpreter<'target'>|
-Interpreter<'hasKillEater'>
+Interpreter<'hasKillEater'> |
+Interpreter<'series'>
 
 export type SchemaImposedProperties = {
     nonTradeable?: true,
@@ -116,6 +118,7 @@ export type SchemaImposedProperties = {
     nonEconomy?: true, // pretty sure this one doesnt appear as an imposed schema property
     canCraftIfPurchased?: true,
     crateNo?: number,
+    series?: number,
 }
 
 export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};

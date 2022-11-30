@@ -97,6 +97,7 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     2014: ["sheen", getFloat],
     2025: ["killstreakTier", getFloat],
     2027: ["australium", getBool],
+    // 2031: ["series", getIntFromFloat], i dont think this appears as a gc attribute
     2053: ["festivized", getBool],
 };
 
@@ -105,6 +106,10 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
     // crateNo might be imposed by schema lol
     if(!!schema?.crateNo) {
         attributes['crateNo'] = schema.crateNo;
+    }
+
+    if(schema?.series) {
+        attributes['series'] = schema.series;
     }
 
     const craftable = isCraftable(item, schema);

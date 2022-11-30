@@ -31,6 +31,11 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             prop.crateNo = parseInt(item.static_attrs["set supply crate series"]);
             shouldAdd = true;
         }
+        
+        if(item.attributes?.["series number"]) {
+            prop.series = parseInt(item.attributes?.["series number"].value);
+            shouldAdd = true;
+        }
 
         if (item.capabilities?.can_craft_if_purchased) {
             shouldAdd = true;
