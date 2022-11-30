@@ -2,6 +2,7 @@
 import { eEconItemFlags, spellIndexes } from "./data";
 import { Attribute, BackpackEntry, FabricatorAttribute, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
 import protobuf from 'protobufjs';
+import path from "path";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -13,7 +14,7 @@ const getIntFromFloatAsArray = (data: Buffer) => [getIntFromFloat(data)];
 
 // example attributesString: '2014|\x01\x02\x01\x03|\x01\x02\x01\x03|7.000000|\x01\x02\x01\x03|\x01\x02\x01\x03|2012|\x01\x02\x01\x03|\x01\x02\x01\x03|572.000000'
 const getFabricatorItem = (attr: Attribute) => {
-    const root = protobuf.loadSync('../proto/gc.proto');
+    const root = protobuf.loadSync(path.resolve(__dirname, '../proto/gc.proto'));
     const messageType = root.lookupType("CAttribute_DynamicRecipeComponent");
     const message = messageType.decode(Buffer.from(attr.value_bytes));
     const object = messageType.toObject(message);
