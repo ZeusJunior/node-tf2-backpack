@@ -80,6 +80,7 @@ export type FabricatorItem<T extends number | string = number> = {
         sheen?: T;
         killstreaker?: T;
         killstreakTier?: T;
+        target?: number;
     }, // attributesString,
     numRequired: number,
     numFulfilled: number
