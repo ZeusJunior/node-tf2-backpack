@@ -18,6 +18,7 @@ const parser = new tf2backpack.BackpackParser(itemsGame);
 # Docs
 ### Constructor(itemsGame)
 - `itemsGame` - `itemSchema` property from node-tf2. See [the docs](https://github.com/DoctorMcKay/node-tf2#itemschema).  
+
 Constructs a new BackpackParser.  
 It is recommended that you ***save*** the itemSchema. It is not emitted on every connection, as it is cached. Currently working on figuring out a way to maybe force a refresh, but no promises.  
 

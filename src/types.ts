@@ -29,12 +29,16 @@ export interface Attribute {
     value_bytes: Buffer
 };
 
+export interface FabricatorAttribute {
+    def_index: number;
+    value: number;
+};
+
 export interface EquippedState {
     new_class: number;
     new_slot: number;
 }
 
-// todo: add rest
 export type InterpretedAttributes<T extends number | string = number> = {
     spells?: T[];
     parts?: T[];
@@ -58,9 +62,8 @@ export type InterpretedAttributes<T extends number | string = number> = {
     // Not returned in Item type, but used in parseItem
     hasKillEater?: boolean;
     elevated?: boolean;
-    // TODO: Also stringify the attributes in these?
-    outputItem?: FabricatorItem;
-    inputItems?: FabricatorItem[];
+    outputItem?: FabricatorItem<T>;
+    inputItems?: FabricatorItem<T>[];
 };
 
 export type MainAttributes = {
@@ -69,18 +72,15 @@ export type MainAttributes = {
     quality: number;
 };
 
-export type FabricatorItem = {
+export type FabricatorItem<T extends number | string = number> = {
     defindex: number,
     quality: number,
     componentFlags: number, // TODO: Figure out what this is
     attributes: {
-        // TODO: Convert the value to buffer and then run through parseItem again or something to enable this
-        // sheen?: number;
-        // killstreaker?: number;
-        // killstreakTier?: number;
-        def_index: number;
-        value: number;
-    }[], // attributesString,
+        sheen?: T;
+        killstreaker?: T;
+        killstreakTier?: T;
+    }, // attributesString,
     numRequired: number,
     numFulfilled: number
   }
