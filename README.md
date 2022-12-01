@@ -45,12 +45,12 @@ Since there are no standardized skus for some properties, this module also provi
 ### mapHexToPaintName
 ```ts
 mapHexToPaintName(primaryColor?: string, secondaryColor?: string): string {}
+```
 
 - `primaryColor` - Primary color of the paint can, the `paint` property from parseBackpack output
 - `secondaryColor` - Secondary color of the paint can, the `paint_other` property from parseBackpack output
 
 - Returns `string` - Name of the paint
 
-```
 
 
