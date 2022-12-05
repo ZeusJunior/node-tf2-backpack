@@ -71,8 +71,8 @@ const getSpell = (data: Buffer, attribute?: Attribute) => {
 };
 
 export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
-    /* Unusual effect */
     133: ["medalNo", getInt],
+    // Unusual effect
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
     187: ["crateNo", getIntFromFloat],
@@ -98,6 +98,8 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     2025: ["killstreakTier", getFloat],
     2027: ["australium", getBool],
     // 2031: ["series", getIntFromFloat], i dont think this appears as a gc attribute
+    // Taunt effects are a different attribute, since they only appear when using the taunt
+    2041: ["effect", getInt],
     2053: ["festivized", getBool],
 };
 
