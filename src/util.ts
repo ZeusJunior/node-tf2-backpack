@@ -5,11 +5,9 @@ export function parseItemsGame(itemsGame: ItemsGame) {
     const defindexMap = {} as SchemaLookup
     for(const [defindex, item] of Object.entries(itemsGame['items'])) {
         let prop: SchemaImposedProperties = {};
-        let shouldAdd = false;
 
         const check = (name: any) => {
             if(!!(item.static_attrs?.[name] || item.attributes?.[name])) {
-                shouldAdd = true;
                 return true;
             }
             return false;            
@@ -29,16 +27,13 @@ export function parseItemsGame(itemsGame: ItemsGame) {
 
         if(item.static_attrs?.["set supply crate series"]) {
             prop.crateNo = parseInt(item.static_attrs["set supply crate series"]);
-            shouldAdd = true;
         }
         
         if(item.attributes?.["series number"]) {
             prop.series = parseInt(item.attributes?.["series number"].value);
-            shouldAdd = true;
         }
 
         if (item.capabilities?.can_craft_if_purchased) {
-            shouldAdd = true;
             prop.canCraftIfPurchased = true;
         }
 
@@ -54,13 +49,11 @@ export function parseItemsGame(itemsGame: ItemsGame) {
                 prefab.includes('killstreakifier_base') ||
                 prefab.includes('killstreakifier_kit_basic') // implements killstreakifier_base
             ) {
-                shouldAdd = true;
                 prop.nonCraftable = true;
             }
 
             // Always tradable
             if (prefab.includes('paint_can_team_color')) {
-                shouldAdd = true;
                 prop.alwaysTradable = true;
             }
 
@@ -70,7 +63,6 @@ export function parseItemsGame(itemsGame: ItemsGame) {
                 prefab.includes('promo') ||
                 prefab.includes('score_reward_hat') // implements promo and hat (capability)
             ) {
-                shouldAdd = true;
                 prop.nonTradeable = true;
             }
 
@@ -94,12 +86,11 @@ export function parseItemsGame(itemsGame: ItemsGame) {
                 prefab.includes('item_bak_fear_monger') || // implements hat
                 prefab.includes('item_bak_arkham_cowl') // implements hat
             ) {
-                shouldAdd = true;
                 prop.canCraftIfPurchased = true;
             }
         }
 
-        if (shouldAdd) {
+        if (Object.keys(prop).length > 0) {
             defindexMap[defindex] = prop;
         }
     }
