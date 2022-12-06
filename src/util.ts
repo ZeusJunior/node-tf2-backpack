@@ -68,7 +68,7 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             if (
                 prefab.includes('tournament_medal') ||
                 prefab.includes('promo') ||
-                prefab.includes('score_reward_hat ') // implements promo and hat (capability)
+                prefab.includes('score_reward_hat') // implements promo and hat (capability)
             ) {
                 shouldAdd = true;
                 prop.nonTradeable = true;
