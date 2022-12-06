@@ -176,7 +176,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
 
             if (outputItem) {
                 parsed.outputItem = getFabricatorItem(outputItem);
-                fabricatorDefs = fabricatorDefs.filter((i) => i !== outputDef);
+                fabricatorDefs.pop();
             }
 
             parsed.inputItems = [];
