@@ -13,6 +13,12 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             return false;            
         }
 
+        const maybeGetAttribute = (name: string) => {
+            let value = item.static_attrs?.[name] || item.attributes?.[name]?.value;
+            if(typeof value === 'undefined') return;
+            return parseInt(value);
+        }
+
         if(check("cannot trade")) {
             prop.nonTradeable = true;
         }
@@ -25,20 +31,14 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             prop.alwaysTradable = true;
         }
 
-        if(item.static_attrs?.["set supply crate series"]) {
-            prop.crateNo = parseInt(item.static_attrs["set supply crate series"]);
-        }
-        
-        if(item.attributes?.["series number"]) {
-            prop.series = parseInt(item.attributes?.["series number"].value);
-        }
+        prop.crateNo = maybeGetAttribute("set supply crate series");
+        prop.series = maybeGetAttribute("series number");
+        prop.paintkit = maybeGetAttribute("paintkit_proto_def_index");
+        prop.target = maybeGetAttribute("tool target item");
 
+        
         if (item.capabilities?.can_craft_if_purchased) {
             prop.canCraftIfPurchased = true;
-        }
-
-        if(item.static_attrs?.["paintkit_proto_def_index"]) {
-            prop.paintkit = parseInt(item.static_attrs?.["paintkit_proto_def_index"]);
         }
 
         if (item.prefab) {
@@ -90,9 +90,11 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             }
         }
 
-        if (Object.keys(prop).length > 0) {
+        if (Object.keys(prop).filter(isDefined).length > 0) {
             defindexMap[defindex] = prop;
         }
     }
     return defindexMap;
 }
+
+export const isDefined = (i: any): i is {} => typeof i !== 'undefined'; 
