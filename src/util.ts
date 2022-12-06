@@ -90,7 +90,7 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             }
         }
 
-        if (Object.keys(prop).filter(isDefined).length > 0) {
+        if (Object.values(prop).filter(isDefined).length > 0) {
             defindexMap[defindex] = prop;
         }
     }
