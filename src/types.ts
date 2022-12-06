@@ -119,6 +119,7 @@ export type SchemaImposedProperties = {
     canCraftIfPurchased?: true,
     crateNo?: number,
     series?: number,
+    paintkit?:number
 }
 
 export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};

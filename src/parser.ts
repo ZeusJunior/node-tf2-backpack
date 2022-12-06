@@ -114,6 +114,10 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         attributes['series'] = schema.series;
     }
 
+    if(typeof schema?.paintkit !== 'undefined') {
+        attributes['paintkit'] = schema.paintkit;
+    }
+
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {

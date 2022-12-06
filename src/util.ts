@@ -42,6 +42,10 @@ export function parseItemsGame(itemsGame: ItemsGame) {
             prop.canCraftIfPurchased = true;
         }
 
+        if(item.static_attrs?.["paintkit_proto_def_index"]) {
+            prop.paintkit = parseInt(item.static_attrs?.["paintkit_proto_def_index"]);
+        }
+
         if (item.prefab) {
             const prefab = item.prefab.split(' ');
             // Never craftable
