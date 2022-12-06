@@ -3,6 +3,7 @@ import { eEconItemFlags, spellIndexes } from "./data";
 import { Attribute, BackpackEntry, FabricatorAttribute, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
 import protobuf from 'protobufjs';
 import path from "path";
+import { isDefined } from "./util";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -114,8 +115,8 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         attributes['series'] = schema.series;
     }
 
-    if(typeof schema?.paintkit !== 'undefined') {
-        attributes['paintkit'] = schema.paintkit;
+    if(isDefined(schema?.paintkit)) {
+        attributes['paintkit'] = schema?.paintkit;
     }
 
     const craftable = isCraftable(item, schema);
@@ -173,7 +174,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
                 parsed.outputItem = getFabricatorItem(outputItem);
                 fabricatorDefs = fabricatorDefs.filter((i) => i !== outputDef);
             }
-            
+
             parsed.inputItems = [];
             fabricatorDefs.forEach((defindex) => {
                 const inputItem = getAttribute(itemAttributes, defindex);
@@ -189,7 +190,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
         /**
          * if return type is an array then if one exists, we concat
          */
-        if(typeof parsed[name] !== 'undefined' && Array.isArray(parsed[name]) && Array.isArray(value)) {
+        if(isDefined(parsed[name]) && Array.isArray(parsed[name]) && Array.isArray(value)) {
             // We do a little crime
             // @ts-ignore
             parsed[name] = parsed[name].concat(value);

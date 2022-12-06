@@ -15,7 +15,7 @@ export function parseItemsGame(itemsGame: ItemsGame) {
 
         const maybeGetAttribute = (name: string) => {
             let value = item.static_attrs?.[name] || item.attributes?.[name]?.value;
-            if(typeof value === 'undefined') return;
+            if(!isDefined(value)) return;
             return parseInt(value);
         }
 
