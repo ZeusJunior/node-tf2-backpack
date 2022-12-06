@@ -158,7 +158,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
         // The rest is input items (any 2000 - 2009)
         // We do input and output all at once
         if (attribute.def_index === 2000) {
-            const fabricatorDefs = attributes.filter((defindex) => {
+            let fabricatorDefs = attributes.filter((defindex) => {
                 if (defindex >= 2000 && defindex <= 2009) {
                     return defindex;
                 }
@@ -168,8 +168,12 @@ export function parseAttributes(itemAttributes: Attribute[]) {
             });
 
             const outputItem = getAttribute(itemAttributes, outputDef);
-            if (outputItem) parsed.outputItem = getFabricatorItem(outputItem);
 
+            if (outputItem) {
+                parsed.outputItem = getFabricatorItem(outputItem);
+                fabricatorDefs = fabricatorDefs.filter((i) => i !== outputDef);
+            }
+            
             parsed.inputItems = [];
             fabricatorDefs.forEach((defindex) => {
                 const inputItem = getAttribute(itemAttributes, defindex);
