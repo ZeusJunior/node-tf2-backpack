@@ -3,6 +3,7 @@ import { eEconItemFlags, spellIndexes } from "./data";
 import { Attribute, BackpackEntry, FabricatorAttribute, FabricatorItem, InterpretedAttributes, Interpreters, SchemaImposedProperties, SchemaLookup } from "./types";
 import protobuf from 'protobufjs';
 import path from "path";
+import { isDefined } from "./util";
 
 const getFloat = (data: Buffer) => data.readFloatLE(0);
 const getIntFromFloat = (data: Buffer) => Math.round(getFloat(data));
@@ -114,6 +115,14 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         attributes['series'] = schema.series;
     }
 
+    if(isDefined(schema?.paintkit)) {
+        attributes['paintkit'] = schema?.paintkit;
+    }
+
+    if(isDefined(schema?.target)) {
+        attributes['target'] = schema?.target;
+    }
+
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {
@@ -154,7 +163,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
         // The rest is input items (any 2000 - 2009)
         // We do input and output all at once
         if (attribute.def_index === 2000) {
-            const fabricatorDefs = attributes.filter((defindex) => {
+            let fabricatorDefs = attributes.filter((defindex) => {
                 if (defindex >= 2000 && defindex <= 2009) {
                     return defindex;
                 }
@@ -164,7 +173,11 @@ export function parseAttributes(itemAttributes: Attribute[]) {
             });
 
             const outputItem = getAttribute(itemAttributes, outputDef);
-            if (outputItem) parsed.outputItem = getFabricatorItem(outputItem);
+
+            if (outputItem) {
+                parsed.outputItem = getFabricatorItem(outputItem);
+                fabricatorDefs.pop();
+            }
 
             parsed.inputItems = [];
             fabricatorDefs.forEach((defindex) => {
@@ -181,7 +194,7 @@ export function parseAttributes(itemAttributes: Attribute[]) {
         /**
          * if return type is an array then if one exists, we concat
          */
-        if(typeof parsed[name] !== 'undefined' && Array.isArray(parsed[name]) && Array.isArray(value)) {
+        if(isDefined(parsed[name]) && Array.isArray(parsed[name]) && Array.isArray(value)) {
             // We do a little crime
             // @ts-ignore
             parsed[name] = parsed[name].concat(value);

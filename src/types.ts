@@ -111,15 +111,17 @@ Interpreter<'target'>|
 Interpreter<'hasKillEater'> |
 Interpreter<'series'>
 
-export type SchemaImposedProperties = {
-    nonTradeable?: true,
-    nonCraftable?: true,
-    alwaysTradable?: true,
-    nonEconomy?: true, // pretty sure this one doesnt appear as an imposed schema property
-    canCraftIfPurchased?: true,
-    crateNo?: number,
-    series?: number,
-}
+export type SchemaImposedProperties = Partial<{
+    nonTradeable: true,
+    nonCraftable: true,
+    alwaysTradable: true,
+    nonEconomy: true, // pretty sure this one doesnt appear as an imposed schema property
+    canCraftIfPurchased: true,
+    crateNo: number,
+    series: number,
+    paintkit: number,
+    target: number
+}>
 
 export type SchemaLookup = {[key: string]: SchemaImposedProperties | undefined};
 

@@ -1,5 +1,6 @@
 import { spellNames, parts, sheens, killstreakers } from "./data";
 import { FabricatorItem, InterpretedAttributes, Item } from "./types";
+import { isDefined } from "./util";
 
 const getSpellName = (spell: number) => spellNames[spell];
 const getPartName = (part: number) => parts[part];
@@ -21,10 +22,6 @@ const getKillstreakTierName = (tier?: number) => {
     if (tier === 2) return "Specialized Killstreak";
     if (tier === 3) return "Professional Killstreak";
     return;
-};
-
-function isDefined(i: any): i is {} {
-    return typeof i !== 'undefined';
 };
 
 
