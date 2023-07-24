@@ -123,13 +123,17 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         attributes['target'] = schema?.target;
     }
 
+    if (hasKillEater === true && item.quality !== 11) {
+        // counts kills but isn't strange? elevated quality
+        attribute['elevated'] = true;
+    }
+
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {
         ...attributes,
         craftable,
         tradable,
-        elevated: hasKillEater && item.quality !== 11, // counts kills but isn't strange? elevated quality
     };
 }
 
