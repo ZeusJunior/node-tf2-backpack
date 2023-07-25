@@ -125,7 +125,7 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
 
     if (hasKillEater === true && item.quality !== 11) {
         // counts kills but isn't strange? elevated quality
-        attribute['elevated'] = true;
+        attributes['elevated'] = true;
     }
 
     const craftable = isCraftable(item, schema);
