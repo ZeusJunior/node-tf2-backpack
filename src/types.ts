@@ -158,7 +158,7 @@ interface PreserveStringAlias extends String {};
 /**  
  * Int64 User Generated Content Identifier.
  * 
- * Data can be retrieved by sending GET to 
+ * URL to retrieve the image can be retrieved by sending GET to 
  * ISteamRemoteStorage/GetUGCFileDetails/v1/ 
 */
 type UGCID = string & PreserveStringAlias

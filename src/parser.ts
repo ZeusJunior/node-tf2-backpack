@@ -80,7 +80,7 @@ let ugcidInt32Store = BIGINT_ZERO;
  * @param data Buffer to parse
  * @param attribute entire attribute tag (to identify which attribute we're parsing)
  * 
- * @returns undefined if ugcid is not complete, 
+ * @returns undefined if ugcid is not complete, the string representation of the UGCID otherwise 
  */
 const getDecalUGCID = (data: Buffer, attribute?: Attribute) => {
     let isAlreadySet = !!ugcidInt32Store;
