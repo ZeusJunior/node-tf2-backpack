@@ -65,6 +65,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     elevated?: boolean;
     outputItem?: FabricatorItem<T>;
     inputItems?: FabricatorItem<T>[];
+    customTexture?: UGCID; // applied decal id, see UGCID for more info
 };
 
 export type MainAttributes = {
@@ -109,7 +110,8 @@ Interpreter<'crateNo'> |
 Interpreter<'medalNo'> |
 Interpreter<'target'>|
 Interpreter<'hasKillEater'> |
-Interpreter<'series'>
+Interpreter<'series'> | 
+Interpreter<'customTexture'>
 
 export type SchemaImposedProperties = Partial<{
     nonTradeable: true,
@@ -150,3 +152,13 @@ type ItemsGameItem = {
     prefab?: string
     [key: string]: any
 }
+
+interface PreserveStringAlias extends String {};
+
+/**  
+ * Int64 User Generated Content Identifier.
+ * 
+ * Data can be retrieved by sending GET to 
+ * ISteamRemoteStorage/GetUGCFileDetails/v1/ 
+*/
+type UGCID = string & PreserveStringAlias

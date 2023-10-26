@@ -71,13 +71,51 @@ const getSpell = (data: Buffer, attribute?: Attribute) => {
     return [spellIndexes[attribute.def_index][spell]];
 };
 
+const BIGINT_ZERO = BigInt(0);
+let ugcidInt32Store = BIGINT_ZERO;
+
+/**
+ * Parse int64 UGCID from the component int32 buffers, attributes 152, 227
+ * 
+ * @param data Buffer to parse
+ * @param attribute entire attribute tag (to identify which attribute we're parsing)
+ * 
+ * @returns undefined if ugcid is not complete, 
+ */
+const getDecalUGCID = (data: Buffer, attribute?: Attribute) => {
+    let isAlreadySet = !!ugcidInt32Store;
+
+    if(attribute?.def_index === 152) { // custom texture lo
+        ugcidInt32Store = BigInt(getInt(data)) | ugcidInt32Store;
+        if(!isAlreadySet) return undefined;
+       
+        const value = ugcidInt32Store;
+        ugcidInt32Store = BIGINT_ZERO; // unset store contents
+        return value.toString();
+    }
+
+    if(attribute?.def_index === 227) { // custom texture hi
+        ugcidInt32Store = (BigInt(getInt(data)) << BigInt(32)) | ugcidInt32Store;
+        if(!isAlreadySet) return undefined;
+         
+        const value = ugcidInt32Store;
+        ugcidInt32Store = BIGINT_ZERO;
+        return value.toString();
+    }
+
+
+    return undefined;
+}
+
 export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     133: ["medalNo", getInt],
     // Unusual effect
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
+    152: ["customTexture", getDecalUGCID], // decal lower int32 component
     187: ["crateNo", getIntFromFloat],
     214: ["hasKillEater", exists],
+    227: ["customTexture", getDecalUGCID], // decal higher int32 component
     229: ["craft", getInt],
     261: ["paint_other", getHexStringFromFloat],
     380: ["parts", getIntFromFloatAsArray],
