@@ -1,6 +1,6 @@
 # node-tf2-backpack
-Typed module to parse the `backpack` property from [node-tf2](https://github.com/DoctorMcKay/node-tf2).  
-Using this you no longer have to retrieve your own (bots) backpack from the steam API, which has been having issues with increasing ratelimits.
+Typed module to parse inventory items from [node-tf2](https://github.com/DoctorMcKay/node-tf2)
+Using this you no longer have to retrieve your own (bots) backpack from the steam API, which has been having issues with increasing ratelimits.  
 
 # Installation
 ```
@@ -41,6 +41,7 @@ parseItem(item: BackpackEntry, mapToString = false): Item<string | number> {}
 - `item` - `item` from node-tf2's `itemAcquired`/`itemChanged`/`itemRemoved` events. See [the docs](https://github.com/DoctorMcKay/node-tf2#itemacquired).
 - `mapToString` - set to true to return spells, parts, sheen, killstreaker, killstreakTier and wear as names instead of IDs
 - Returns `Item<string | number>`  
+
 Exactly the same as parseBackpack but for a single item for convenience
 
 ## Other 
