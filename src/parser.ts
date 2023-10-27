@@ -112,10 +112,10 @@ export const ATTRIBUTE_HANDLERS: Record<number, Interpreters> = {
     // Unusual effect
     134: ["effect", getIntFromFloat],
     142: ["paint", getHexStringFromFloat],
-    152: ["customTexture", getDecalUGCID], // decal lower int32 component
+    152: ["decal", getDecalUGCID], // decal lower int32 component
     187: ["crateNo", getIntFromFloat],
     214: ["hasKillEater", exists],
-    227: ["customTexture", getDecalUGCID], // decal higher int32 component
+    227: ["decal", getDecalUGCID], // decal higher int32 component
     229: ["craft", getInt],
     261: ["paint_other", getHexStringFromFloat],
     380: ["parts", getIntFromFloatAsArray],
@@ -191,6 +191,10 @@ export function parseFabricatorAttributes(fabAttribute: FabricatorAttribute[]) {
 
 export function parseAttributes(itemAttributes: Attribute[]) {
     let parsed = {} as InterpretedAttributes;
+
+    // the ugcid parser relies on both attributes being present
+    // but knowing steam some items might have malformed data, so we reset state just in case;
+    ugcidInt32Store = BIGINT_ZERO;
 
     const attributes = itemAttributes.map(a => a.def_index);
     for (const attribute of itemAttributes) {

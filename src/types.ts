@@ -65,7 +65,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
     elevated?: boolean;
     outputItem?: FabricatorItem<T>;
     inputItems?: FabricatorItem<T>[];
-    customTexture?: UGCID; // applied decal id, see UGCID for more info
+    decal?: UGCID; // applied decal id, see UGCID for more info
 };
 
 export type MainAttributes = {
@@ -111,7 +111,7 @@ Interpreter<'medalNo'> |
 Interpreter<'target'>|
 Interpreter<'hasKillEater'> |
 Interpreter<'series'> | 
-Interpreter<'customTexture'>
+Interpreter<'decal'>
 
 export type SchemaImposedProperties = Partial<{
     nonTradeable: true,
