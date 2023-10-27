@@ -51,21 +51,56 @@ export type InterpretedAttributes<T extends number | string = number> = {
     killstreaker?: T;
     killstreakTier?: T;
     paint?: string;
-    paint_other?: string; // This is the paint hex for BLU team (if the paint is team colored)
+    /**
+     * This is the paint hex for BLU team (if the paint is team colored)
+     */
+    paint_other?: string;
     wear?: T;
     paintkit?: number;
-    craft?: number; // craft number (including > 100)
-    crateNo?: number; // crate/case series
-    medalNo?: number; // medal number
+    /**
+     * craft number (including > 100)
+     */
+    craft?: number;
+    /**
+     * Crate or case series
+     */
+    crateNo?: number;
+    /**
+     * Medal number, for example Gentle Manne's Service Medal
+     */
+    medalNo?: number;
+    /**
+     * Defindex of the item that this item is used on, for example killstreak kits
+     */
     target?: number;
-    series?: number; // chemistry set series
+    /**
+     * Chemistry set series
+     */
+    series?: number;
     // Whether an item is capable of counting kills. Indicates elevated quality if primary quality isnt 11
     // Not returned in Item type, but used in parseItem
     hasKillEater?: boolean;
+    /**
+     * Whether an item can count kills, but is not strange.  
+     * Like Strange Vintages, Strange Uniques etc. May also appear on Strange Decorated Weapons
+     */
     elevated?: boolean;
+    /**
+     * Output item of a fabricator
+     */
     outputItem?: FabricatorItem<T>;
+    /**
+     * Input items of a fabricator
+     */
     inputItems?: FabricatorItem<T>[];
-    decal?: UGCID; // applied decal id, see UGCID for more info
+    /**  
+     * Int64 User Generated Content Identifier.
+     * 
+     * URL to retrieve the image can be retrieved by sending GET to 
+     * ISteamRemoteStorage/GetUGCFileDetails/v1/ 
+     * @see https://wiki.teamfortress.com/wiki/WebAPI/GetUGCFileDetails
+    */
+    decal?: string;
 };
 
 export type MainAttributes = {
@@ -152,13 +187,3 @@ type ItemsGameItem = {
     prefab?: string
     [key: string]: any
 }
-
-interface PreserveStringAlias extends String {};
-
-/**  
- * Int64 User Generated Content Identifier.
- * 
- * URL to retrieve the image can be retrieved by sending GET to 
- * ISteamRemoteStorage/GetUGCFileDetails/v1/ 
-*/
-type UGCID = string & PreserveStringAlias
