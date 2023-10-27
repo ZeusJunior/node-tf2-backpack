@@ -161,13 +161,17 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         attributes['target'] = schema?.target;
     }
 
+    if (hasKillEater === true && item.quality !== 11) {
+        // counts kills but isn't strange? elevated quality
+        attributes['elevated'] = true;
+    }
+
     const craftable = isCraftable(item, schema);
     const tradable = isTradable(item, schema);
     return {
         ...attributes,
         craftable,
         tradable,
-        elevated: hasKillEater && item.quality !== 11, // counts kills but isn't strange? elevated quality
     };
 }
 
@@ -295,15 +299,15 @@ export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties 
     // Not part of economy (also as attribute 777 but unused)
     if ((item.flags & eEconItemFlags.kEconItemFlag_NonEconomy) != 0) return false;
 
-	// Order matters, always tradable overrides cannot trade.
+    // Order matters, always tradable overrides cannot trade.
     // 777 NonEconomy should be unused but just in case
-	if (attributes.includes(777)) return false;
+    if (attributes.includes(777)) return false;
 
     // Always tradable
-	if (attributes.includes(195) || schema?.alwaysTradable) return true;
+    if (attributes.includes(195) || schema?.alwaysTradable) return true;
 
     // Not tradable
-	if (attributes.includes(153) || schema?.nonTradeable) return false;
+    if (attributes.includes(153) || schema?.nonTradeable) return false;
 
     // Items with origin Achievement, Foreign, Preview or SteamWorkshopContribution are not tradable
     if ([1, 14, 17, 18].includes(item.origin)) return false;

@@ -1,14 +1,55 @@
 export enum eEconItemFlags {
-	kEconItemFlag_CannotTrade									= 1 << 0,
-	kEconItemFlag_CannotBeUsedInCrafting						= 1 << 1,
-	kEconItemFlag_CanBeTradedByFreeAccounts						= 1 << 2,
-	kEconItemFlag_NonEconomy									= 1 << 3,		// used for items that are meant to not interact in the economy -- these can't be traded, gift-wrapped, crafted, etc.
-	kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012	= 1 << 4,		// cosmetic items coming from the store are now usable in crafting; this flag is set on all items purchased from the store after this change was made
-	kEconItemFlagClient_ForceBlueTeam							= 1 << 5,
-	kEconItemFlagClient_StoreItem								= 1 << 6,
-	kEconItemFlagClient_Preview									= 1 << 7,		// only set on the client; means "this item is being previewed"
-	kEconItemFlags_CheckFlags_AllGCFlags						= kEconItemFlag_CannotTrade | kEconItemFlag_CannotBeUsedInCrafting | kEconItemFlag_CanBeTradedByFreeAccounts | kEconItemFlag_NonEconomy | kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012,
+    kEconItemFlag_CannotTrade                                   = 1 << 0,
+    kEconItemFlag_CannotBeUsedInCrafting                        = 1 << 1,
+    kEconItemFlag_CanBeTradedByFreeAccounts                     = 1 << 2,
+    kEconItemFlag_NonEconomy                                    = 1 << 3, // used for items that are meant to not interact in the economy -- these can't be traded, gift-wrapped, crafted, etc.
+    kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012    = 1 << 4, // cosmetic items coming from the store are now usable in crafting; this flag is set on all items purchased from the store after this change was made
+    kEconItemFlagClient_ForceBlueTeam                           = 1 << 5,
+    kEconItemFlagClient_StoreItem                               = 1 << 6,
+    kEconItemFlagClient_Preview                                 = 1 << 7, // only set on the client; means "this item is being previewed"
+    kEconItemFlags_CheckFlags_AllGCFlags                        = kEconItemFlag_CannotTrade | kEconItemFlag_CannotBeUsedInCrafting | kEconItemFlag_CanBeTradedByFreeAccounts | kEconItemFlag_NonEconomy | kEconItemFlag_PurchasedAfterStoreCraftabilityChanges2012,
 };
+
+export const paints: Record<string, string> = {
+    // The duplicates at the start are the RED-BLU team colors.
+    // Including both shades because legacy paints can miss either of these.
+    '654740': 'An Air of Debonair',
+    '28394D': 'An Air of Debonair',
+    '3B1F23': 'Balaclavas Are Forever',
+    '18233D': 'Balaclavas Are Forever',
+    'C36C2D': 'Cream Spirit',
+    'B88035': 'Cream Spirit',
+    '483838': "Operator's Overalls",
+    '384248': "Operator's Overalls",
+    'B8383B': 'Team Spirit',
+    '5885A2': 'Team Spirit',
+    '803020': 'The Value of Teamwork',
+    '256D8D': 'The Value of Teamwork',
+    'A89A8C': 'Waterlogged Lab Coat',
+    '839FA3': 'Waterlogged Lab Coat',
+    '2F4F4F': 'A Color Similar to Slate',
+    '7D4071': 'A Deep Commitment to Purple',
+    '141414': 'A Distinctive Lack of Hue',
+    'BCDDB3': `A Mann's Mint`,
+    '2D2D24': 'After Eight',
+    '7E7E7E': 'Aged Moustache Grey',
+    'E6E6E6': 'An Extraordinary Abundance of Tinge',
+    'E7B53B': 'Australium Gold',
+    'D8BED8': 'Color No. 216-190-216',
+    'E9967A': 'Dark Salmon Injustice',
+    '808000': 'Drably Olive',
+    '729E42': 'Indubitably Green',
+    'CF7336': 'Mann Co. Orange',
+    'A57545': 'Muskelmannbraun',
+    '51384A': `Noble Hatter's Violet`,
+    'C5AF91': 'Peculiarly Drab Tincture',
+    'FF69B4': 'Pink as Hell',
+    '694D3A': 'Radigan Conagher Brown',
+    '32CD32': 'The Bitter Taste of Defeat and Lime',
+    'F0E68C': `The Color of a Gentlemann's Business Pants`,
+    '7C6C57': 'Ye Olde Rustic Colour',
+    '424F3B': `Zepheniah's Greed`
+}
 
 export const parts: Record<number, string> = {
     // 0: "Kills",
@@ -171,36 +212,5 @@ export const killstreakers: Record<number, string | undefined> = {
 }
 
 export const mapHexToPaintName = (primaryColor?: string, secondaryColor?: string) => {
-    return {
-        '28394D': 'An Air of Debonair',
-        '18233D': 'Balaclavas Are Forever',
-        'B88035': 'Cream Spirit',
-        '384248': "Operator's Overalls",
-        '5885A2': 'Team Spirit',
-        '256D8D': 'The Value of Teamwork',
-        '839FA3': 'Waterlogged Lab Coat',
-    }[secondaryColor?.toUpperCase() || ''] || {
-        '2F4F4F': 'A Color Similar to Slate',
-        '7D4071': 'A Deep Commitment to Purple',
-        '141414': 'A Distinctive Lack of Hue',
-        'BCDDB3': `A Mann's Mint`,
-        '2D2D24': 'After Eight',
-        '7E7E7E': 'Aged Moustache Grey',
-        'E6E6E6': 'An Extraordinary Abundance of Tinge',
-        'E7B53B': 'Australium Gold',
-        'D8BED8': 'Color No. 216-190-216',
-        'E9967A': 'Dark Salmon Injustice',
-        '808000': 'Drably Olive',
-        '729E42': 'Indubitably Green',
-        'CF7336': 'Mann Co. Orange',
-        'A57545': 'Muskelmannbraun',
-        '51384A': `Noble Hatter's Violet`,
-        'C5AF91': 'Peculiarly Drab Tincture',
-        'FF69B4': 'Pink as Hell',
-        '694D3A': 'Radigan Conagher Brown',
-        '32CD32': 'The Bitter Taste of Defeat and Lime',
-        'F0E68C': `The Color of a Gentlemann's Business Pants`,
-        '7C6C57': 'Ye Olde Rustic Colour',
-        '424F3B': `Zepheniah's Greed`
-    }[primaryColor?.toUpperCase() || ''];
+    return paints[secondaryColor?.toUpperCase() || ''] || paints[primaryColor?.toUpperCase() || ''];
 }
