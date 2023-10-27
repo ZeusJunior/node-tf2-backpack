@@ -1,6 +1,6 @@
 import { parseItem } from "./parser";
 import { convertToStrings } from "./stringifier";
-import { InterpretedAttributes, Item, ItemsGame, MainAttributes, NodeTF2Backpack, SchemaLookup } from "./types";
+import { BackpackEntry, InterpretedAttributes, Item, ItemsGame, MainAttributes, NodeTF2Backpack, SchemaLookup } from "./types";
 import { parseItemsGame } from "./util";
 
 export class BackpackParser {
@@ -22,6 +22,21 @@ export class BackpackParser {
         if (!mapToString) return bp;
 
         return convertToStrings(bp);
+    }
+
+    parseItem(item: BackpackEntry, mapToString: true): Item<string>;
+    parseItem(item: BackpackEntry, mapToString: false): Item<number>;
+    parseItem(item: BackpackEntry, mapToString = false): Item<string | number> {
+        const parsed = Object.assign<MainAttributes, InterpretedAttributes>({
+            assetid: item.id,
+            defindex: item.def_index,
+            quality: item.quality,
+            quantity: item.quantity
+        }, parseItem(item, this.schemaLookup[item.def_index]) )
+        
+        if (!mapToString) return parsed;
+
+        return convertToStrings(parsed);
     }
 }
 

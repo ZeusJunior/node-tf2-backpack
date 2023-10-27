@@ -34,6 +34,15 @@ parseBackpack(backpack: NodeTF2Backpack, mapToString = false): Item<string | num
 - `mapToString` - set to true to return spells, parts, sheen, killstreaker, killstreakTier and wear as names instead of IDs
 - Returns `Item<string | number>[]`
 
+### parseItem
+```ts
+parseItem(item: BackpackEntry, mapToString = false): Item<string | number> {}
+```
+- `item` - `item` from node-tf2's `itemAcquired`/`itemChanged`/`itemRemoved` events. See [the docs](https://github.com/DoctorMcKay/node-tf2#itemacquired).
+- `mapToString` - set to true to return spells, parts, sheen, killstreaker, killstreakTier and wear as names instead of IDs
+- Returns `Item<string | number>`
+Exactly the same as parseBackpack but for a single item for convenience
+
 ## Other 
 
 Since there are no standardized skus for some properties, this module also provides the following exports:

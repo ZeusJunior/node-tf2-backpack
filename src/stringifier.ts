@@ -24,8 +24,10 @@ const getKillstreakTierName = (tier?: number) => {
     return;
 };
 
-
-export function convertToStrings(items: Item<number>[]): Item<string>[] {
+export function convertToStrings(items: Item<number>): Item<string>;
+export function convertToStrings(items: Item<number>[]): Item<string>[];
+export function convertToStrings(items: Item<number>[] | Item<number>): Item<string>[] | Item<string> {
+    if (!Array.isArray(items)) return stringify(items);
     return items.map(stringify);
 }
 
