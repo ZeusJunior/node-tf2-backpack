@@ -107,6 +107,11 @@ export type MainAttributes = {
     assetid: string;
     defindex: number;
     quality: number;
+    /**
+     * Default 1 for all items  
+     * For items like Noise Makers and Dueling Mini-Games this is the number of uses
+     */
+    quantity: number;
 };
 
 export type FabricatorItem<T extends number | string = number> = {

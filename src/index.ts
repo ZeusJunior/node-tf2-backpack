@@ -15,7 +15,8 @@ export class BackpackParser {
         const bp = backpack.map((item) => Object.assign<MainAttributes, InterpretedAttributes>({
             assetid: item.id,
             defindex: item.def_index,
-            quality: item.quality
+            quality: item.quality,
+            quantity: item.quantity
         }, parseItem(item, this.schemaLookup[item.def_index]) ));
         
         if (!mapToString) return bp;
