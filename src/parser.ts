@@ -172,6 +172,8 @@ export function parseItem(item: BackpackEntry, schema: SchemaImposedProperties |
         ...attributes,
         craftable,
         tradable,
+        assetid: item.id,
+        originalid: item.original_id
     };
 }
 

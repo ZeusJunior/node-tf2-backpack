@@ -40,6 +40,15 @@ export interface EquippedState {
 }
 
 export type InterpretedAttributes<T extends number | string = number> = {
+    /**
+     * id of the particular item instance, changes with every trade or modification
+     */
+    assetid: AssetID, 
+    /**
+     * the original item id, presists between trades and item modifications
+     * however for unknown reasons it may be undefined sometimes.
+     */
+    originalid: AssetID | null,
     spells?: T[];
     parts?: T[];
     effect?: number;
@@ -192,3 +201,5 @@ type ItemsGameItem = {
     prefab?: string
     [key: string]: any
 }
+
+export type AssetID = string;
