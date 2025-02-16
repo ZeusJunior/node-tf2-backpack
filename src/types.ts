@@ -112,6 +112,9 @@ export type MainAttributes = {
      * For items like Noise Makers and Dueling Mini-Games this is the number of uses
      */
     quantity: number;
+
+    custom_name: null | string;
+    custom_desc: null | string;
 };
 
 export type FabricatorItem<T extends number | string = number> = {

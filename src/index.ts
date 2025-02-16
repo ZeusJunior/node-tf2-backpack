@@ -16,7 +16,9 @@ export class BackpackParser {
             assetid: item.id,
             defindex: item.def_index,
             quality: item.quality,
-            quantity: item.quantity
+            quantity: item.quantity,
+            custom_name: item.custom_name,
+            custom_desc: item.custom_desc
         }, parseItem(item, this.schemaLookup[item.def_index]) ));
         
         if (!mapToString) return bp;
@@ -31,7 +33,9 @@ export class BackpackParser {
             assetid: item.id,
             defindex: item.def_index,
             quality: item.quality,
-            quantity: item.quantity
+            quantity: item.quantity,
+            custom_name: item.custom_name,
+            custom_desc: item.custom_desc
         }, parseItem(item, this.schemaLookup[item.def_index]) )
         
         if (!mapToString) return parsed;
