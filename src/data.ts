@@ -86,7 +86,7 @@ export const parts: Record<number, string> = {
     32: "Teammates Extinguished",
     33: "Critical Kills",
     34: "Kills While Explosive-Jumping",
-    36: "Sappers Destroyed" /*"Sappers Removed"*/,
+    36: "Sappers Destroyed", /*"Sappers Removed"*/
     37: "Cloaked Spies Killed",
     38: "Medics Killed That Have Full ÜberCharge",
     39: "Robots Destroyed",
@@ -96,7 +96,7 @@ export const parts: Record<number, string> = {
     46: "Robots Killed During Halloween",
     47: "Defender Kills",
     48: "Submerged Enemy Kills",
-    // 49: "Kills While Invuln ÜberCharged",
+    49: "Kills While Übercharged", /**Kills While Invuln ÜberCharged */
     // 50: "Food Items Eaten",
     // 51: "Banners Deployed",
     // 58: "Seconds Cloaked",
