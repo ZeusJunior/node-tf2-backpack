@@ -105,6 +105,7 @@ export type InterpretedAttributes<T extends number | string = number> = {
 
 export type MainAttributes = {
     assetid: string;
+    originalid: null | string;
     defindex: number;
     quality: number;
     /**

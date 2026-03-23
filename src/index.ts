@@ -14,6 +14,7 @@ export class BackpackParser {
     parseBackpack(backpack: NodeTF2Backpack, mapToString = false): Item<string | number>[] {
         const bp = backpack.map((item) => Object.assign<MainAttributes, InterpretedAttributes>({
             assetid: item.id,
+            originalid: item.original_id,
             defindex: item.def_index,
             quality: item.quality,
             quantity: item.quantity,
@@ -31,6 +32,7 @@ export class BackpackParser {
     parseItem(item: BackpackEntry, mapToString = false): Item<string | number> {
         const parsed = Object.assign<MainAttributes, InterpretedAttributes>({
             assetid: item.id,
+            originalid: item.original_id,
             defindex: item.def_index,
             quality: item.quality,
             quantity: item.quantity,
