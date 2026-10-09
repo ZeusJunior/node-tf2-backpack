@@ -268,7 +268,7 @@ export function isCraftable(item: BackpackEntry, schema?: SchemaImposedPropertie
     if (attributes.includes(449) || schema?.nonCraftable) return false;
 
     // Items with an expiration date or preview items are not craftable
-    if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
+    if (attributes.includes(302) || (item.flags & eEconItemFlags.kEconItemFlagClient_Preview) != 0) return false;
 
     // Explicitly marked as not craftable
     if ((eEconItemFlags.kEconItemFlag_CannotBeUsedInCrafting & item.flags) != 0) return false;
@@ -313,13 +313,13 @@ export function isTradable(item: BackpackEntry, schema: SchemaImposedProperties 
     if ([1, 14, 17, 18].includes(item.origin)) return false;
 
     // Items with an expiration date or preview items are not tradable
-    if (attributes.includes(302) || item.flags == eEconItemFlags.kEconItemFlagClient_Preview) return false;
+    if (attributes.includes(302) || (item.flags & eEconItemFlags.kEconItemFlagClient_Preview) != 0) return false;
 
     // Items with quality Self-Made, Valve or Community are not tradable
     if ([7, 8, 9].includes(item.quality)) return false; 
     
     // Explicitly marked as not tradable
-    if (item.flags == eEconItemFlags.kEconItemFlag_CannotTrade || schema?.nonTradeable) return false;
+    if ((item.flags & eEconItemFlags.kEconItemFlag_CannotTrade) != 0 || schema?.nonTradeable) return false;
 
     return true;
 }
